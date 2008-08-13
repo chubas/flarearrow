@@ -1,0 +1,7 @@
+#labels log,reporting
+We are not done yet!
+
+= Log of activities =
+
+== Aug 13 - 08 ==
+~~TODO~~
