@@ -1,0 +1,9 @@
+#labels conventions,language
+== Language and conventions ==
+
+~~ TODO ~~
+
+Check these links
+
+http://caml.inria.fr/resources/doc/guides/guidelines.en.html
+http://mojave.caltech.edu/jyh/classes/cs134/cs134b/2005/public_html/style.html
