@@ -1,0 +1,6 @@
+#labels license
+= License =
+
+Flare Arrow is licensed under GNU GPL 3.0
+
+~~TODO ~~
