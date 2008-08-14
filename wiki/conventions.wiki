@@ -1,28 +1,30 @@
-#labels conventions,language,Styleguide
-== Language and conventions ==
+#labels conventions,language,styleguide
+= Language and conventions =
 
-  # 80 Column Limit
-  # No Tab Characters
-  # Code Must Compile
-  # Comments Go Above the Code They Reference
-  # Avoid Useless Comments
-  # Avoid Over-commenting
-  # Use Meaningful Names
-  # Type Annotations
-  # Avoid Global Mutable Variables
-  # Naming:
-    * Variables and functions:
-    * Constructors
-    * Types
-    * Signatures
-    * Structures
-    * Functors
-  # Indent Two Spaces at a Time
 
-~~ TODO ~~
+There are several conventions and style guides for writing programs in OCaml. Here is a list of the most common to all of them we will follow.
 
-Check these links
-  * http://www.seas.upenn.edu/~cis500/cis500-f06/resources/programming_style.html
-  * http://www.cs.cornell.edu/Courses/cs312/2001sp/style.html
-  * http://caml.inria.fr/resources/doc/guides/guidelines.en.html
-  * http://mojave.caltech.edu/jyh/classes/cs134/cs134b/2005/public_html/style.html
+  # 80 column limit
+  # No tab characters
+  # Two space indents
+  # Code must compile (enforced by TDD)
+  # Comments go above the code they reference
+  # Avoid useless comments and over-commenting (_Don't hesitate to comment when there's a difficulty. If there's no difficulty, there's no point in commenting_)
+  # Use meaningful names for variables (exceptions are let blocks and temporary short-scoped variables)
+  # Type annotations for top-level variables and functions
+  # Avoid global mutable variables
+  # Naming: (see [http://www.seas.upenn.edu/~cis500/cis500-f06/resources/programming_style.html#14 2])
+    * Variables, functions and types: lowecase, joined by underscores
+    * Constructors, modules and functors: uppercase and camelcased
+  # Break long lines into smaller pieces
+  # Don't leave incomplete match expressions
+  # Don't misuse `if` expressions (use the shortcuts and structures provided by the language itself)
+
+Since we are still learning OCaml language, some of the conventions that show discrepancy among the guides will be decided on the run, when we know more about the language and identify the pros and cons of them.
+
+== References ==
+
+  * [http://www.cs.cornell.edu/Courses/cs312/2001sp/style.html CS312 SML Style Guide] (Cornell)
+  * [http://www.seas.upenn.edu/~cis500/cis500-f06/resources/programming_style.html Penn Engineering's guide]
+  * [http://caml.inria.fr/resources/doc/guides/guidelines.en.html Caml programming guidelines]
+  * [http://mojave.caltech.edu/jyh/classes/cs134/cs134b/2005/public_html/style.html CS134b OCaml Style Guide] (Caltech)
