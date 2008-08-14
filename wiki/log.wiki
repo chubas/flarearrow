@@ -3,5 +3,27 @@ We are not done yet!
 
 = Log of activities =
 
+== Aug 11 - 08 ==
+
+  * Date: Aug 11 - 08
+  * Duration: 1 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Couldn't fin a right name for the project
+  * Results: [http://latteware.blogspot.com/2008/08/random-name-picker-la-mozilla.html A project name generator] done by Rubén 
+ 
+== Aug 12 - 08 ==
+
+  * Date: Aug 12 - 08
+  * Duration: 1 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Couldn't fin a right name for the project, couldn't register the few names we agreed on
+  * Results: Found the name for the framework and possible names for the other parts of the project, registration of the project 
+
+
 == Aug 13 - 08 ==
-~~TODO~~
+
+  * Date: Aug 13 - 08
+  * Duration: 1/2 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Lots of work and no ideas for the wiki
+  * Results: 
