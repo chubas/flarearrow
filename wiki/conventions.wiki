@@ -1,9 +1,28 @@
-#labels conventions,language
+#labels conventions,language,Styleguide
 == Language and conventions ==
+
+  # 80 Column Limit
+  # No Tab Characters
+  # Code Must Compile
+  # Comments Go Above the Code They Reference
+  # Avoid Useless Comments
+  # Avoid Over-commenting
+  # Use Meaningful Names
+  # Type Annotations
+  # Avoid Global Mutable Variables
+  # Naming:
+    * Variables and functions:
+    * Constructors
+    * Types
+    * Signatures
+    * Structures
+    * Functors
+  # Indent Two Spaces at a Time
 
 ~~ TODO ~~
 
 Check these links
-
-http://caml.inria.fr/resources/doc/guides/guidelines.en.html
-http://mojave.caltech.edu/jyh/classes/cs134/cs134b/2005/public_html/style.html
+  * http://www.seas.upenn.edu/~cis500/cis500-f06/resources/programming_style.html
+  * http://www.cs.cornell.edu/Courses/cs312/2001sp/style.html
+  * http://caml.inria.fr/resources/doc/guides/guidelines.en.html
+  * http://mojave.caltech.edu/jyh/classes/cs134/cs134b/2005/public_html/style.html
