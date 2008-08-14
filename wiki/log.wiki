@@ -9,7 +9,7 @@ We are not done yet!
   * Duration: 1 hour
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: Couldn't fin a right name for the project
-  * Results: [http://latteware.blogspot.com/2008/08/random-name-picker-la-mozilla.html A project name generator] done by Rubén 
+  * Results: [http://latteware.blogspot.com/2008/08/random-name-picker-la-mozilla.html A project name generator] written by Rubén 
  
 == Aug 12 - 08 ==
 
