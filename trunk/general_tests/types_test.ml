@@ -48,4 +48,5 @@ let razor_leaf = {atk_name = "Razor leaf"; atk_element = Plant};;
 razor_leaf ---> squirtle;;
 water_gun ---> articuno;;
 let poor_charizard = water_gun ---> charizard in
-  Printf.printf "%s\n" (if snd poor_charizard == Dead then "Poor Charizard =(" else "Yay Charizard! =)");;
+  let is_dead = (snd poor_charizard = Dead) in
+    Printf.printf "%s\n" (if is_dead then "Poor Charizard =(" else "Yay Charizard! =)");;
