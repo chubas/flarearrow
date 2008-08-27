@@ -31,7 +31,7 @@
 
 == Aug 14 - 08 ==
 
-  * Date: Aug 13 - 08
+  * Date: Aug 14 - 08
   * Duration: 1/2 hour
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: no ideas for the wiki
@@ -43,5 +43,4 @@
   * Duration: 1/4 hour
   * People present: Victor
   * Problems Faced: Wikis don't allow feedback from users and people interested in the project
-  * Results: Thinking about a blog for the project but flarearrow at blogspot is in "use", correction of a few misspellings  
-
+  * Results: Thinking about a blog for the project but flarearrow at blogspot is in "use", correction of a few misspellings and errors XD
