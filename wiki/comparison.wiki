@@ -1,5 +1,6 @@
 #labels comparison,features,featured
 = Comparison between OCaml web frameworks =
+----
 ||Functionality||WDialog||Ex-Nunc||Ocsigen||mod_caml||
 ||Continuations based framework||No||No||Yes||No||
 ||Static validation of xhtml||No||No. Run time validation planned||Yes||No||
