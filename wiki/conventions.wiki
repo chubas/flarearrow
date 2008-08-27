@@ -1,6 +1,6 @@
 #labels conventions,language,styleguide
 = Language and conventions =
-
+----
 
 There are several conventions and style guides for writing programs in OCaml. Here is a list of the most common to all of them we will follow.
 
