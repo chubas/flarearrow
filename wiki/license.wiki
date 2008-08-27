@@ -1,10 +1,13 @@
-#labels license
+#labels license,GPL
 = License =
+----
 
-Flare Arrow is licensed under GNU GPL 3.0
+*Flare Arrow* is licensed under GNU GPL 3.0
 
 Under the [http://www.gnu.org/philosophy/free-sw.html Free Software Definition], we think of user's four main rights. We are interested in contributing to GNU principles and spread the use and production of Free Software. Hence, we chose the GNU GPL 3.0 license, which allows us to do that.
 
 Also, we think that free software allow the program to reach beyond we can do. That is, as seeing a [comparison comparison between some existing OCaml web frameworks], we spotted that collaboration is low or non-existant between developers. We'd like to encourage certain community interested on this project to continue it and make it better. A GPL licence would allow us to do that.
+
+[http://www.gnu.org/licenses/gpl.html The GPL V3 License Text]
 
 [http://www.gnu.org/graphics/gplv3-127x51.png]
