@@ -1,14 +1,15 @@
 #labels log,reporting
-We are not done yet!
+*We are not done yet!*
 
 = Log of activities =
+----
 
 == Aug 11 - 08 ==
 
   * Date: Aug 11 - 08
   * Duration: 1 hour
   * People present: Rubén, Benjamín, Rogelio, Victor
-  * Problems Faced: Couldn't fin a right name for the project
+  * Problems Faced: Couldn't find a right name for the project
   * Results: [http://latteware.blogspot.com/2008/08/random-name-picker-la-mozilla.html A project name generator] written by Rubén 
  
 == Aug 12 - 08 ==
@@ -16,7 +17,7 @@ We are not done yet!
   * Date: Aug 12 - 08
   * Duration: 1 hour
   * People present: Rubén, Benjamín, Rogelio, Victor
-  * Problems Faced: Couldn't fin a right name for the project, couldn't register the few names we agreed on
+  * Problems Faced: Couldn't find a right name for the project, couldn't register the few names we agreed on
   * Results: Found the name for the framework and possible names for the other parts of the project, registration of the project 
 
 
@@ -27,3 +28,20 @@ We are not done yet!
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: Lots of work and no ideas for the wiki
   * Results: 
+
+== Aug 14 - 08 ==
+
+  * Date: Aug 13 - 08
+  * Duration: 1/2 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: no ideas for the wiki
+  * Results: updated wiki
+
+== Aug 27 - 08 ==
+
+  * Date: Aug 13 - 08
+  * Duration: 1/4 hour
+  * People present: Victor
+  * Problems Faced: Wikis don't allow feedback from users and people interested in the project
+  * Results: Thinking about a blog for the project but flarearrow at blogspot is in "use", correction of a few misspellings  
+
