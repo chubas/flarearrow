@@ -1,0 +1,7 @@
+= OCaml IDEs =
+
+Rubén: For Linux, I have used Gedit and Eclipse.
+
+Gedit is great for quick scripts and testing (integrating a console, syntax highlighting, etc.)
+
+Eclipse is a great alternative for integrated projects. As far as I have tested, among [http://www.cocan.org/ocaml_and_eclipse several Eclipse plugins], [http://ocaml.eclipse.ortsa.com:8480/ocaide/ OcalIDE] is the best. It's a bit tricky to install, since it doesn't work with gcj (either launch Eclipse with gij or sun virtual machines, or configure your default java vm), and requires Eclipse version 3.3+. It also handles OCamlbuild and Omake, which may be useful for makefiles and general project integration.
