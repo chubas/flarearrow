@@ -1,3 +1,5 @@
+(* Hola mundo *)
+
 (* Types behave like enums *)
 type element = Fire | Water | Plant | Ice ;;
 type status = Alive | Dead;;
