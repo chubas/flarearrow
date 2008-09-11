@@ -1,7 +1,26 @@
-= OCaml IDEs =
+= OCaml IDEs and Editors =
 
-Rubén: For Linux, I have used Gedit and Eclipse.
+So far, we've used Gedit, Kate, Vim and Eclipse.
 
-Gedit is great for quick scripts and testing (integrating a console, syntax highlighting, etc.)
+- Gedit and Kate mostly for scripts and tests. (integrating a console, syntax highlighting)
+- Vim and Eclipse have their respective plugins for OCaml
 
-Eclipse is a great alternative for integrated projects. As far as I have tested, among [http://www.cocan.org/ocaml_and_eclipse several Eclipse plugins], [http://ocaml.eclipse.ortsa.com:8480/ocaide/ OcalIDE] is the best. It's a bit tricky to install, since it doesn't work with gcj (either launch Eclipse with gij or sun virtual machines, or configure your default java vm), and requires Eclipse version 3.3+. It also handles OCamlbuild and Omake, which may be useful for makefiles and general project integration.
+Here is a description of three Eclipse plugins for Eclipse: http://www.cocan.org/ocaml_and_eclipse
+
+Plugins Mentioned: 
+1. OCaml Development Tools. http://ocamldt.free.fr/ 
+2. EclipseFP (Eclipse OCaml Support) http://eclipsefp.sourceforge.net/ocaml/
+3. OcaIDE http://ocaml.eclipse.ortsa.com:8480/ocaide/
+
+
+Eclipse is a great alternative for integrated projects. As far as we've tested, OcalIDE is the best option. Providing autocompletion, syntax hightlighting and support for  OCamlbuild and Omake, which are useful for makefiles and general project integration. 
+
+
+To install OcaIDE: 
+
+Open Eclipse, click on Help > Software Updates > Find and Install, in the page that opens, click on "Search for new features to install" and then on Next, then, click on "New Remote Site" and enter OcaIDE as a name, and http://ocaml.eclipse.ortsa.com/ as URL. Select "OcaIDE" in the list, and click Finish. 
+
+
+OcaIDE has some issues with gcj (either launch Eclipse with gij or sun virtual machines, or configure your default java vm).
+
+We suggest using Eclipse version 3.3 or greater. For more info about installing OcaIDE in Eclipse 3.2 go to http://ocaml.eclipse.ortsa.com:8480/ocaide/eclipse32.html
