@@ -33,8 +33,10 @@ let rec reading_state (str:char list) (result:token list) =
         octal_start_state t result ("" ++ h)
       | '1' .. '9' ->
         decimal_state t result ("" ++ h)
-      | ' ' -> 
+      | ' ' | '\n'-> 
         reading_state t result
+      | '.' ->
+        float_state t result ("" ++ h)
       | '"' ->
         string_state t result "" 
       | '+' | '-' | '/' | '*' ->
@@ -58,7 +60,7 @@ and identifier_state str result partial =
     )
   | _ -> end_state ((Identifier partial)::result)
 and string_state str result partial =
-  match str with h::t -> (
+  match str with h::t -> ( 
     match h with
         | '"' -> reading_state t ((Str partial)::result)
         | '\n' -> raise NotTerminatedString 
