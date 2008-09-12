@@ -5,10 +5,10 @@ let rec stateA (str:char list) res = match str with
 	| h::t -> (
 		match h with
 			| '{' -> stateB t res
-			| '$' -> res
+			| '\\'-> stateF t (res ++ h)
 			| _ -> stateA t (res ++ h)
 		)
-	| _ ->  raise NotTerminatedString
+	| _ ->  res
 
 and stateB str res = match str with
 	| h::t ->(
@@ -46,9 +46,15 @@ and stateE str res =	match str with
 		)
 	| _ -> raise NotTerminatedString
 
+and stateF str res= match str with
+	| h::t ->(
+		match h with
+			| _ -> stateA t (res++h)
+		)
+	| _->raise NotTerminatedString
 
 let rec remove filename =
 	let x = file_to_stringf filename in
-		let y = string_to_list (x^"$") in
+		let y = string_to_list x in
 	stateA y ""
 	;;

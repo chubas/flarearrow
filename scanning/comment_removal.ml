@@ -48,6 +48,6 @@ let file_contents filename =
   file_to_string reading_channel;;
 
 
-let x = list_to_string( remove_comments (string_to_list (file_contents "uno.html")));;
+let x = list_to_string (remove_comments (string_to_list (file_contents "uno.html")));;
 x;;
 
