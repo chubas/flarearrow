@@ -15,8 +15,8 @@
  * It would only occur when no $ symbol is attached to the end of
  * the string, which method _parse_ does
  *)
-
-let rec reading (str:char list) (result:block list) = 
+(*
+let rec reading (str:char list) (result:token list) = 
   match str with h::t -> (
     match h with
       | '{' ->
@@ -36,7 +36,8 @@ and bracket_open str result  =
         reading t result
     )
   | _ -> raise NotTerminatedString
-and comment_start str result = 
+(* and comment_start str result = *) 
 
 
 (*let parse str = reading_state (explode (str ^ "$")) [];;*)
+*)
