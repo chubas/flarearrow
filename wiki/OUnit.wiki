@@ -44,7 +44,7 @@ let _ = run_test_tt ~verbose:true text_fixture;
 }}}
 
 
-Just compile and run Test_SimpleMath.ml.
+Just compile and run Test_SimpleMath.ml
 
 (You may need to load oUnit.cma and unix.cma )
 If using Eclipse with OcaIDE follow the steps in [http://www.youtube.com/watch?v=5Om2aEijfls this video]
