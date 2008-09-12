@@ -38,3 +38,17 @@ let file_to_string channel =
       (* Return the contents of the buffer as a string *)
       End_of_file -> Buffer.contents buf
 ;;
+
+let file_to_stringf filename =
+		let buf = Buffer.create 2048 in
+	let rec print_all_lines in_chan =
+		Buffer.add_string buf ((input_line in_chan)^"\n");
+		print_all_lines in_chan
+	in
+	let in_file = open_in filename in
+	try
+		print_all_lines in_file
+	with End_of_file -> 
+		close_in in_file;
+		Buffer.contents buf
+	;;
