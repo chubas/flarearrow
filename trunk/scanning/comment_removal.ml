@@ -1,3 +1,6 @@
+open Exceptions
+open Flarelib
+
 let rec remove_comments_s contents result =
   match contents with h::t -> (
     match h with

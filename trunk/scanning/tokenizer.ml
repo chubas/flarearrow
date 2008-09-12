@@ -42,7 +42,7 @@ let rec reading_state (str:char list) (result:token list) =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> List.rev result
+  | _ -> end_state result
 and identifier_state str result partial =
   match str with h::t -> (
     match h with
@@ -56,7 +56,7 @@ and identifier_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> end_state ((Identifier partial)::result)
 and string_state str result partial =
   match str with h::t -> (
     match h with
@@ -82,7 +82,7 @@ and octal_start_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> ((Decimal partial)::result) (* Just a zero was given *)
 and hex_start_state str result partial = 
   match str with h::t -> (
     match h with
@@ -111,7 +111,7 @@ and hex_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> end_state ((Hexadecimal partial)::result)
 
 and decimal_state str result partial = 
   match str with h::t -> (
@@ -125,7 +125,7 @@ and decimal_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> ((Decimal partial)::result)
 and float_state str result partial = 
   match str with h::t -> (
     match h with
@@ -136,7 +136,7 @@ and float_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> ((Float partial)::result)
 and octal_state str result partial = 
   match str with h::t -> (
     match h with
@@ -149,7 +149,7 @@ and octal_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> ((Octal partial)::result)
 
 and long_hex_state str result partial = 
   match str with h::t -> (
@@ -159,7 +159,7 @@ and long_hex_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
+  | _ -> end_state ((LongHexadecimal partial)::result)
 
 and long_octal_state str result partial = 
   match str with h::t -> (
@@ -170,7 +170,7 @@ and long_octal_state str result partial =
         raise (_invalid_character h)
     )
   | _ ->
-    raise NotTerminatedString
+    end_state ((LongOctal partial)::result)
     
 and long_decimal str result partial = 
   match str with h::t -> (
@@ -180,12 +180,13 @@ and long_decimal str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> raise NotTerminatedString
-
+  | _ -> end_state ((LongDecimal partial)::result)
+and end_state result = 
+  List.rev result
 
 let tokenize string = 
-  reading_state string []
- 
+  reading_state string [] 
+
 
 (* MAIN *)
-let list = tokenize (string_to_list "ABCD 0x1234 wawawa 1.234 4345.345 012327 ");;
+let list = tokenize (string_to_list "ABCD 0x1234 wawawa 1.234 4345.345 012327");;
