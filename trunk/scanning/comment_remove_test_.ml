@@ -12,7 +12,6 @@ let text_fixture ="Comment remove suite" >:::
 		"Test error" >:: (fun()->
 			assert_raises NotTerminatedString (fun ()-> stateA (string_to_list "Not terminated{#") "");
 			);
-		
 	]
 	
 let _= run_test_tt ~verbose:true text_fixture;  
