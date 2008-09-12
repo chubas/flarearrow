@@ -15,8 +15,7 @@ and stateB str res = match str with
 		match h with
 			| '#' -> stateC t (res^"  ")
 			| '%' -> stateA t (res^"{%")
-			| '{' -> stateA t (res^"{{")
-			| '$' -> res
+			| '{' -> stateG t (res^"{{")
 			| _ -> stateA t ((res++'{')++h)
 		)
 	| _ -> raise NotTerminatedString
@@ -26,7 +25,6 @@ and stateC str res = match str with
 		match h with
 			| '\\' -> stateD t res
 			| '#' -> stateE t res
-			| '$' -> res
 			| _ -> stateC t (res++' ')
 		)
 	| _ -> raise NotTerminatedString
@@ -52,6 +50,14 @@ and stateF str res= match str with
 			| _ -> stateA t (res++h)
 		)
 	| _->raise NotTerminatedString
+
+and stateG str res=match str with
+	| h::t->(
+		match h with
+			| '}'-> stateA t (res++h)
+			| _-> stateG t (res++h)
+		)
+	| _-> raise NotTerminatedString
 
 let rec remove filename =
 	let x = file_to_stringf filename in
