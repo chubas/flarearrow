@@ -1,5 +1,5 @@
-open Exceptions
-open Flarelib
+open Exceptions;;
+open Flarelib;;
 
 let rec remove_comments_s contents result =
   match contents with h::t -> (
@@ -17,7 +17,7 @@ and bracket_open_s contents result =
       | '#' -> 
         comment_open_s t result
       | _ ->
-        remove_comments_s t ('{'::result)
+        remove_comments_s t ('{'::(h::result))
   )
   | _ -> raise NotTerminatedString
 and comment_open_s contents result = 
@@ -42,16 +42,12 @@ and comment_close_s contents result =
 let remove_comments contents = 
   let reversed_contents = remove_comments_s contents [] in
   List.rev reversed_contents;;
-
-(********************* MAIN  *******************) 
+ 
 let file_contents filename = 
   let reading_channel = open_in filename in
   file_to_string reading_channel;;
 
- 
-let filename = Sys.argv.(1);;
 
-let contents = file_contents filename;;
-let list = string_to_list contents;;
-let list = remove_comments list;;
-print_endline (list_to_string list);;
+let x = list_to_string( remove_comments (string_to_list (file_contents "uno.html")));;
+x;;
+
