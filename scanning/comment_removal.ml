@@ -1,7 +1,3 @@
-(* Exceptions *)
-exception NotTerminatedString;;
-exception SyntaxError
-
 let rec remove_comments_s contents result =
   match contents with h::t -> (
     match h with
@@ -43,48 +39,6 @@ and comment_close_s contents result =
 let remove_comments contents = 
   let reversed_contents = remove_comments_s contents [] in
   List.rev reversed_contents;;
-
-(********************* AUXILIARY FUNCTIONS  *******************)
-(* to be moved to a better place *)
-
-let rec string_to_list_aux string start finish accum =
-  if start <= finish then 
-    string_to_list_aux string (start+1) finish ((String.get string start)::accum)
-  else accum
-
-let string_to_list string =
-  List.rev (string_to_list_aux string 0 ((String.length string)-1) [])
-  
-let (++) str chr = 
-  str ^  (Printf.sprintf "%c" chr);;
-
-let list_to_string list = 
-  List.fold_left (++) "" list
-
-(* Read line by line of the file in an expandable buffer and return the file*)
-(* contents in a string *)
-let file_to_string channel =
-  let buf = Buffer.create 4096 in
-  let rec loop () = 
-    (* Read a line *)
-    let line = input_line channel in
-    (* Put the line in the buffer *)
-    Buffer.add_string buf line;
-    (* Put the newline character in the buffer *)
-    Buffer.add_char buf '\n';
-    (* Continue reading *)
-    loop ()
-    in
-    (* Read the file, and return the contents of the buffer as string
-       when EOF is reached *)
-    try
-      loop ()
-    with
-      (* Return the contents of the buffer as a string *)
-      End_of_file -> Buffer.contents buf
-;;
-
-
 
 (********************* MAIN  *******************) 
 let file_contents filename = 
