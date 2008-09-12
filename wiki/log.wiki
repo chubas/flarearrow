@@ -39,8 +39,40 @@
 
 == Aug 27 - 08 ==
 
-  * Date: Aug 13 - 08
+  * Date: Aug 27 - 08
   * Duration: 1/4 hour
   * People present: Victor
   * Problems Faced: Wikis don't allow feedback from users and people interested in the project
   * Results: Thinking about a blog for the project but flarearrow at blogspot is in "use", correction of a few misspellings and errors XD
+
+== Sep 6 - 08 ==
+
+  * Date: sep 6 - 08
+  * Duration: 1/2 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: defining template language
+  * Results: Template language defined
+
+== Sep 8 - 08 ==
+
+  * Date: sep 8 - 08
+  * Duration: 1/2 hour
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: defining automatas 
+  * Results: defined how we will implement te story cards
+
+== Sep 11 - 08 ==
+
+  * Date: sep 11 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: how to program in Ocaml
+  * Results: file reading, beginning of comment removing
+
+== Sep 12 - 08 ==
+
+  * Date: sep 12 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: time, cannot compile because of linking problems
+  * Results: finished the story cards
