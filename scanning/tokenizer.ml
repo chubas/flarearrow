@@ -76,13 +76,13 @@ and octal_start_state str result partial =
       | '1' .. '7' ->
         octal_state t result (partial ++ h)
       | 'l' | 'L' ->
-        long_decimal t result (partial ++ h)
+        long_decimal_state t result (partial ++ h)
       | ' ' ->
         reading_state t ((Decimal partial)::result)
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> ((Decimal partial)::result) (* Just a zero was given *)
+  | _ -> end_state ((Decimal partial)::result) (* Just a zero was given *)
 and hex_start_state str result partial = 
   match str with h::t -> (
     match h with
@@ -120,12 +120,14 @@ and decimal_state str result partial =
         decimal_state t result (partial ++ h)
       | ' ' ->
         reading_state t ((Decimal partial)::result)
+      | 'l' | 'L' ->
+        long_decimal_state t result (partial ++ h)
       | '.' ->
         float_state t result (partial ++ h)
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> ((Decimal partial)::result)
+  | _ -> end_state ((Decimal partial)::result)
 and float_state str result partial = 
   match str with h::t -> (
     match h with
@@ -136,7 +138,7 @@ and float_state str result partial =
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> ((Float partial)::result)
+  | _ -> end_state ((Float partial)::result)
 and octal_state str result partial = 
   match str with h::t -> (
     match h with
@@ -144,12 +146,14 @@ and octal_state str result partial =
         octal_state t result (partial ++ h)
       | 'l' | 'L' ->
         long_octal_state t result (partial ++ h)
+      | '8' .. '9' ->
+        decimal_state t result (partial ++h)
       | ' ' ->
         reading_state t ((Octal partial)::result)
       | _ ->
         raise (_invalid_character h)
     )
-  | _ -> ((Octal partial)::result)
+  | _ -> end_state ((Octal partial)::result)
 
 and long_hex_state str result partial = 
   match str with h::t -> (
@@ -172,7 +176,7 @@ and long_octal_state str result partial =
   | _ ->
     end_state ((LongOctal partial)::result)
     
-and long_decimal str result partial = 
+and long_decimal_state str result partial = 
   match str with h::t -> (
     match h with
       | ' ' ->
