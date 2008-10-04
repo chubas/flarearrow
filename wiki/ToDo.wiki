@@ -1,6 +1,32 @@
 #labels TODO
 =To-Do List=
 ----
- * *Comment Removing* 
- * *1st Level Lexer*
- * *2nd Level Lexer*   
+ * ~~*Comment Removing*~~ 
+ * ~~*1st Level Lexer*~~
+ * ~~*2nd Level Lexer*~~
+ * *Expression Evaluator*: The expressions in the template language are evaluated to produce a response used along with static text. Expression may include literals and read-only variables (the variables should be found in an association list)
+ * *Arithmetic Expressions*: The arithmetic expressions in the template language should include the following operators with a well defined precedence and associativity:
+   * Sum
+   * Substraction
+   * Multiplication
+   * Division
+   * Module
+ * *Relational Expressions*: Relational expressions in the template language should include the following operators with a well defined precedence and associativity (it should work with strings and numbers):
+   * <
+   * <=
+   * >
+   * >=
+   * = 
+ * *Logic Expressions*: Logic expressions in the template language should include the following operators with a well defined precedence and associativity:
+   * And
+   * Or
+   * Xor
+   * Not
+ * *Expressions with Strings*: The expressions with strings in the template language should include the following operators or functions with a well defined precedence and associativity:
+   * Length
+   * Concatenation
+   * Access
+ * *Expressions with Lists and Dictionaries*: The expressions with lists and dictionaries in the template language allow you to obtain an element of them, it should have a homogeneous notation
+
+
+  
