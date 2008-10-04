@@ -79,31 +79,13 @@ rule first_level tokens acum mode = parse
     }
 {
   
-  let rec print_tokens tokens = match tokens with
-    | [] -> ()
-    | (RawText raw)::t ->
-      print_endline ("\x1b[01;32mRaw:\x1b[01;37m " ^ raw);
-      print_tokens t
-    | (Expression exp)::t ->
-      print_endline ("\x1b[01;33mExpression:\x1b[01;37m " ^ exp);
-      print_tokens t
-    | (Comment com)::t ->
-      print_endline ("\x1b[01;34mComment:\x1b[01;37m " ^ com);
-      print_tokens t;;
+    let tokens_from_file filename = 
+    let lexbuf = Lexing.from_channel (open_in filename) in
+      first_level [] "" RawText_mode lexbuf;;
   
-  let main () =
-  print_endline "==================";
-  let cin =
-     if Array.length Sys.argv > 1
-     then open_in Sys.argv.(1)
-     else stdin
-    in
-      let lexbuf = Lexing.from_channel cin in
-        let tokens = first_level [] "" RawText_mode lexbuf in
-          print_tokens tokens
-          print_enline "\x1b[22;37m";;
-  
-  let _ = Printexc.print main ()
+  let tokens_from_string str = 
+    let lexbuf = Lexing.from_string str in
+      first_level [] "" RawText_mode lexbuf;;
   
 (* To compile:*)
 (* 
