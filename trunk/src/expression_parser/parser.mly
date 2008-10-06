@@ -9,6 +9,7 @@
 	| List of 'a list
 	| Unit of unit
 	| Universal of 'a wrapper
+	| Float of float
 	;;
 
 %}
