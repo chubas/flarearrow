@@ -76,3 +76,46 @@
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: time, cannot compile because of linking problems
   * Results: finished the story cards
+
+== Sep 27 - 08 ==
+  * Date: sep 27 - 08
+  * Duration: 3 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Study of tools for automatic building in ocaml
+  * Results: There is need for a better tool (Default building tool not decided yet)
+
+== Oct 01 - 08 ==
+  * Date: oct 01 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Study of the ocamllex tool, and redesign of the previous lexing implementation
+  * Results: Pseudocode using ocamllex and some code in Rubén's laptop
+
+
+== Oct 3 - 08 ==
+  * Date: oct 03 - 08
+  * Duration: 1.5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Study of ocamlyacc
+  * Results: Design using ocamlyacc
+
+== Oct 4 - 08 ==
+  * Date: oct 03 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Studying of the examples using ocamllex or ocamlyacc 
+  * Results: Practice with both tools
+
+== Oct 5 - 08 ==
+  * Date: oct 05 - 08
+  * Duration: 5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Design and coding of unit tests for the lexer and the parser  
+  * Results: Created unit tests
+
+== Oct 6 - 08 ==
+  * Date: oct 05 - 08
+  * Duration: 5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the parser and more changes to the lexer 
+  * Results: Added a parser and a more recent lexer
