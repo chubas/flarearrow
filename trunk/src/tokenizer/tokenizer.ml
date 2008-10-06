@@ -191,8 +191,4 @@ and end_state result =
   List.rev result
 
 let tokenize string = 
-  reading_state string [] 
-
-
-(* MAIN *)
-let list = tokenize (string_to_list "ABCD 0x1234 wawawa 1.234 4345.345 012327");;
+  reading_state string [];;
