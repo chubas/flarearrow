@@ -27,6 +27,10 @@ def ocamlc(file, includes = '', args = '')
   ex "ocamlc #{includes} #{file}.ml -o #{file}.byte #{args}"
 end
 
+def ocamlyacc(file, includes = '')
+  ex "ocamlyacc #{includes} #{file}.mly"
+end
+
 namespace :flarearrow do
 
   desc "Default task"
@@ -52,6 +56,10 @@ namespace :flarearrow do
         '-I . exceptions.cmo',
       ].join(' ')
     )
+
+    Dir.chdir(File.join(ROOT, 'src', 'expression_parser'))
+    ocamlyacc('parser')
+    ocamlc('parser', 'parser.mli')
     Dir.chdir(ROOT)
   end
 
@@ -90,6 +98,7 @@ namespace :flarearrow do
       `rm *.cmo`
       `rm *.cmi`
       `rm *.byte`
+      `rm *.mli`
     end
     Dir.chdir(ROOT)
   end
