@@ -1,34 +1,34 @@
-{  
-  let (++) str chr = 
-    str ^  (Printf.sprintf "%c" chr);;
+{ 
+  open Grammar;;
+  open Basic_types;;
+   
+  let parse_error s = print_endline s;;
   
-  type slp_numeric =
-    | Int of int
-    | Float of float
-  and slp_basic_type =
-    | Numeric of slp_numeric
-    | Boolean of bool
-    | String of string
-    | Char of char
-  and slp_operator =
+  let (++) str chr = 
+    str ^  (Printf.sprintf "%c" chr);;  
+  
+  (*
+  type slp_token_p =
+    | IDENTIFIER of string
+    (* Basic types operators *)
     | PLUS | MINUS | TIMES | DIV | MOD | NEG
     | AND | OR | XOR | NOT
     | EQL | NOT_EQL | GT | LT | GT_EQ | LT_EQ
     | CARET
-  and slp_token_p =
-    | Identifier of string
-    | BasicType of slp_basic_type
-    | Operator of slp_operator
+    (* Control symbols *)
     | OPEN_PAR | CLOSE_PAR
     | OPEN_BRK | CLOSE_BRK
     | OPEN_SQRBRK | CLOSE_SQRBRK
     | COLON | SEMICOLON
+    | DOT | COMMA 
+    (* Types *)
+    | NUMERIC of slp_numeric
+    | BOOLEAN of bool
+    | STRING of string
+    | CHAR of char
+    (* EOF *)
     | EOF
-
-  type slp_expression =
-    | BASIC of slp_basic_type
-    | LIST of slp_expression list
-    | DICT of (string * slp_expression) list;;
+	*)
 
   exception NotTerminatedString;;
 
@@ -58,36 +58,36 @@ rule second_level = parse
       second_level lexbuf
     }
   | [' ' '\t' '\r'] { second_level lexbuf } 
-  | '"' { BasicType (String (parse_string "" lexbuf)) }
+  | '"' { STRING (parse_string "" lexbuf) }
   | char_seq as character
     {
       let chr = match character with
         | "'\\''" -> '\''
         | "'\\\\'" -> '\\'
         | single_char -> single_char.[1] in
-      BasicType (Char chr)
+      CHAR chr
     }
-  | float_seq   { BasicType (Numeric (Float (float_of_string (Lexing.lexeme lexbuf)))) }
-  | int_seq   { BasicType (Numeric (Int (int_of_string (Lexing.lexeme lexbuf)))) }
-  | "true"    { BasicType (Boolean true) }
-  | "false"   { BasicType (Boolean false) }
-  | "+"       { Operator PLUS }
-  | "-"       { Operator MINUS }
-  | "*"       { Operator TIMES }
-  | "/"       { Operator DIV }
-  | "%"       { Operator MOD }
-  | "~"       { Operator NEG }
-  | "and"     { Operator AND }
-  | "or"      { Operator OR }
-  | "xor"     { Operator XOR }
-  | "not"     { Operator NOT }
-  | "=="      { Operator EQL }
-  | "!="      { Operator NOT_EQL }
-  | ">"       { Operator GT }
-  | "<"       { Operator LT }
-  | ">="      { Operator GT_EQ }
-  | "<="      { Operator LT_EQ }
-  | "^"       { Operator CARET }
+  | float_seq { NUMERIC (Float (float_of_string (Lexing.lexeme lexbuf))) }
+  | int_seq   { NUMERIC (Int (int_of_string (Lexing.lexeme lexbuf))) }
+  | "true"    { BOOLEAN true }
+  | "false"   { BOOLEAN false }
+  | "+"       { PLUS }
+  | "-"       { MINUS }
+  | "*"       { TIMES }
+  | "/"       { DIV }
+  | "%"       { MOD }
+  | "~"       { NEG }
+  | "and"     { AND }
+  | "or"      { OR }
+  | "xor"     { XOR }
+  | "not"     { NOT }
+  | "=="      { EQL }
+  | "!="      { NOT_EQL }
+  | ">"       { GT }
+  | "<"       { LT }
+  | ">="      { GT_EQ }
+  | "<="      { LT_EQ }
+  | "^"       { CARET }
   | ":"       { COLON }
   | ";"       { SEMICOLON }
   | "["       { OPEN_SQRBRK }
@@ -96,7 +96,9 @@ rule second_level = parse
   | ")"       { CLOSE_PAR }
   | "{"       { OPEN_BRK }
   | "}"       { CLOSE_BRK }
-  | identifier_seq { Identifier (Lexing.lexeme lexbuf) }
+  | "."       { DOT }
+  | ","       { COMMA }
+  | identifier_seq { IDENTIFIER (Lexing.lexeme lexbuf) }
   | eof       { EOF }
 and parse_string acum = parse
   | newline_chars as newline
