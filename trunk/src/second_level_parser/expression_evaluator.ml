@@ -1,7 +1,9 @@
 open Basic_types;;
 open Grammar;;
 open Second_level_parser;;
+open First_level_parser;;
 
+let string_of_char c = Printf.sprintf "%c" c;;
 (* Reduces type that eliminates functions to basic types *)
 type expression =
   | EXP  of slp_basic_type
@@ -166,3 +168,23 @@ let print_ocamlet_evaluation str =
 ;;
 
 let peval = print_ocamlet_evaluation;;
+
+let parse_string str =
+	let fl_tokens = tokens_from_string str in
+	String.concat "" (
+			List.map (function
+				| RawText (str, _) -> str
+				| Comment (str, _) -> String.make (String.length str) ' '
+				| Expression (str, _) -> peval str
+		  ) fl_tokens
+		);;
+
+let parse_file file =
+	let fl_tokens = tokens_from_file file in
+	String.concat "" (
+			List.map (function
+				| RawText (str, _) -> str
+				| Comment (str, _) -> String.make (String.length str) ' '
+				| Expression (str, _) -> peval str
+		  ) fl_tokens
+		);;
