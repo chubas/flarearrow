@@ -1,116 +1,112 @@
-open Second_level_parser;;
+open Expression_evaluator;;
 open OUnit;;
-
-let parse_eval str =
-  print_endline "ERROR: NOT IMPLEMENTED";
-  LIST [BASIC (String "Lalala"); BASIC (Numeric (Int 3))];;
 
 let flp_fixture = "Second level parser suite" >:::
   [
     "Simple tests" >:: (fun () ->
       assert_equal
         (BASIC (Numeric (Int 1)))
-        (parse_eval "1")
+        (eval_expression "1")
         ~msg: "Numeric parse - int";
       assert_equal
         (BASIC (Numeric (Float 2.5)))
-        (parse_eval "2.5")
+        (eval_expression "2.5")
         ~msg: "Numeric parse - float";
       assert_equal
         (BASIC (String "A string"))
-        (parse_eval "\"A string\"")
+        (eval_expression "\"A string\"")
         ~msg: "String parse";
       assert_equal
         (BASIC (Char 'c'))
-        (parse_eval "'c'")
+        (eval_expression "'c'")
         ~msg: "Character parse";
       assert_equal
         (BASIC (Boolean true))
-        (parse_eval "true")
+        (eval_expression "true")
         ~msg: "Boolean parse"
     );
     "Numeric operation tests" >:: (fun () ->
       assert_equal
         (BASIC (Numeric (Int 3)))
-        (parse_eval "1 + 2")
+        (eval_expression "1 + 2")
         ~msg: "Integer sum";
       assert_equal
         (BASIC (Numeric (Float 3.0)))
-        (parse_eval "1.0 + 2.0")
+        (eval_expression "1.0 + 2.0")
         ~msg: "Integer sum";
       assert_equal
         (BASIC (Numeric (Int 5)))
-        (parse_eval "6 - 1")
+        (eval_expression "6 - 1")
         ~msg: "Integer substraction";
       assert_equal
         (BASIC (Numeric (Float 3.0)))
-        (parse_eval "5.0 - 2.0")
+        (eval_expression "5.0 - 2.0")
         ~msg: "Float substraction";
       assert_equal
         (BASIC (Numeric (Int 6)))
-        (parse_eval "3 * 2")
+        (eval_expression "3 * 2")
         ~msg: "Integer multiplication";
       assert_equal
         (BASIC (Numeric (Float 6.0)))
-        (parse_eval "3.0 * 2.0")
+        (eval_expression "3.0 * 2.0")
         ~msg: "Float multiplication";
       assert_equal
         (BASIC (Numeric (Int 3)))
-        (parse_eval "7 / 2")
+        (eval_expression "7 / 2")
         ~msg: "Integer division";
       assert_equal
         (BASIC (Numeric (Float 3.5)))
-        (parse_eval "7.0 / 2.0")
+        (eval_expression "7.0 / 2.0")
         ~msg: "Float division"
     );
     "Integer/float coercion" >:: (fun () ->
       assert_equal
         (BASIC (Numeric (Float 3.0)))
-        (parse_eval "1.0 + 2")
+        (eval_expression "1.0 + 2")
         ~msg: "Sum coerce";
       assert_equal
         (BASIC (Numeric (Float 3.0)))
-        (parse_eval "10 - 7.0")
+        (eval_expression "10 - 7.0")
         ~msg: "Substraction coerce";
       assert_equal
         (BASIC (Numeric (Float 10.0)))
-        (parse_eval "5 * 2.0")
+        (eval_expression "5 * 2.0")
         ~msg: "Multiplication coerce";
       assert_equal
         (BASIC (Numeric (Float 5.0)))
-        (parse_eval "10 / 2.0")
+        (eval_expression "10 / 2.0")
         ~msg: "Division coerce";  
     );
     "String operations" >:: (fun () ->
       assert_equal
         (BASIC (String "Hello world"))
-        (parse_eval "\"Hello \" + \"world\"")
+        (eval_expression "\"Hello \" + \"world\"")
         ~msg: "String concatenation";
       assert_equal
         (BASIC (Char 'h'))
-        (parse_eval "\"Char\"[1]")
+        (eval_expression "\"Char\"[1]")
         ~msg: "String character at position";
       assert_equal
         (BASIC (Numeric (Int 5)))
-        (parse_eval "strlen(\"Hello\")")
+        (eval_expression "strlen(\"Hello\")")
         ~msg: "String length"
     );
     "Basic lists and dicts" >:: (fun () ->
       assert_equal
         (LIST [])
-        (parse_eval "[]")
+        (eval_expression "[]")
         ~msg: "Empty list";
       assert_equal
         (LIST [BASIC (Numeric (Int 1)); BASIC (Numeric (Int 2))])
-        (parse_eval "[1; 2]")
+        (eval_expression "[1; 2]")
         ~msg: "Same type list";
       assert_equal
         (LIST [BASIC (Boolean true); BASIC (Char 'e'); BASIC (String "YAY")])
-        (parse_eval "[true; 'e'; \"YAY\"]")
+        (eval_expression "[true; 'e'; \"YAY\"]")
         ~msg: "Polymorphic list";
       assert_equal
         (DICT [])
-        (parse_eval "{}")
+        (eval_expression "{}")
         ~msg: "Empty dictionary";
       assert_equal
         (DICT 
@@ -118,7 +114,7 @@ let flp_fixture = "Second level parser suite" >:::
             "red", BASIC (String "rojo");
             "blue", BASIC (String "azul")
           ])
-        (parse_eval "{\"red\":\"rojo\"; \"blue\":\"azul\"}")
+        (eval_expression "{\"red\":\"rojo\"; \"blue\":\"azul\"}")
         ~msg: "Single type dictionary";
       assert_equal
         (DICT
@@ -127,13 +123,13 @@ let flp_fixture = "Second level parser suite" >:::
             "not true", BASIC (Boolean false);
             "the answer", BASIC (Numeric (Int 42))
           ])
-        (parse_eval "{\"web\" : 2.0; \"not true\" : false; \"the answer\" : 42}")
+        (eval_expression "{\"web\" : 2.0; \"not true\" : false; \"the answer\" : 42}")
         ~msg: "Polymorphic dictionary";
     );
     "Complex lists and dicts" >:: (fun () ->
       assert_equal
         (LIST [ LIST [] ])
-        (parse_eval "[[]]")
+        (eval_expression "[[]]")
         ~msg: "List of lists";
       assert_equal
         (LIST [
@@ -150,7 +146,7 @@ let flp_fixture = "Second level parser suite" >:::
             ]
           ]
         ])
-        (parse_eval
+        (eval_expression
           ("[true; [10; 'a'];" ^
            "{\"PI\":3.14; \"tools\":[\"Red bull\"; \"Vodka\"]}]"))
         ~msg: "Complex list with nested lists and dicts"
@@ -158,11 +154,11 @@ let flp_fixture = "Second level parser suite" >:::
     "List operations" >:: (fun () ->
       assert_equal
         (BASIC (Boolean true))
-        (parse_eval "[1; true; 2.5][1]")
+        (eval_expression "[1; true; 2.5][1]")
         ~msg: "List element at position";
       assert_equal
         (BASIC (Numeric (Int 5)))
-        (parse_eval "len([1;2;3;4;5])")
+        (eval_expression "len([1;2;3;4;5])")
         ~msg: "List length";
       assert_equal
         (LIST
@@ -173,7 +169,7 @@ let flp_fixture = "Second level parser suite" >:::
             BASIC (String "Thursday");
             BASIC (String "Friday");
           ])
-        (parse_eval (
+        (eval_expression (
           "concat(" ^ 
           "[\"Monday\"; \"Tuesday\"; \"Wednesday\"]" ^
           "[\"Thursday\"; \"Friday\"]" ^
