@@ -40,15 +40,12 @@ let numeric_operation x y op_int op_float = match x, y with
 ;;
 
 type slp_expression =
-	| BASIC of slp_basic_type
-	| LIST of slp_expression list
-  | DICT of (string * slp_expression) list
-  | NULL
-;;
-	
-type slp_ocamlet =
-  | FUNCTION of string * (slp_expression list)
-  | EXPRESSION of slp_expression
+	| P_BASIC of slp_basic_type
+	| P_LIST of slp_ocamlet list
+  | P_DICT of (string * slp_ocamlet) list
+and slp_ocamlet =
+  | P_FUN of string * (slp_ocamlet list)
+  | P_EXP of slp_expression
 ;;
 
 %}
@@ -74,25 +71,25 @@ type slp_ocamlet =
 
 parse_ocamlet: /* list of slp_ocamlet */
     EOF /* Empty */                               { [] }
-  | exp_or_fun EOF                                { [$1] }
-  | exp_or_fun SEMICOLON SEMICOLON exp_or_fun     { [$4]@[$1] }
+  | expression EOF                                { [$1] }
+  | expression SEMICOLON SEMICOLON parse_ocamlet  { $1::$4 }
 ;
 
-exp_or_fun: /* slp_ocamlet */
-    OPEN_PAR exp_or_fun CLOSE_PAR              { $2 }
+expression: /* slp_ocamlet */
+    OPEN_PAR expression CLOSE_PAR              { $2 }
   | funct                                      { $1 }
-  | expression                                 { EXPRESSION $1 }
+  | basic_expression                           { $1 }
 
-expression: /* slp_expression */
-  elemental_type                               { $1 }
+basic_expression: /* slp_ocamlet */
+  elemental_type                               { P_EXP $1 }
 ;
 
 funct: /* slp_ocamlet */
-	  IDENTIFIER OPEN_PAR list_contents CLOSE_PAR { FUNCTION ($1, $3) }
+	  IDENTIFIER OPEN_PAR list_contents CLOSE_PAR { P_FUN ($1, $3) }
 	| expression DOT OPEN_SQRBRK expression CLOSE_SQRBRK {
-	            FUNCTION ("_list_at", [$1; $4]) }
+	            P_FUN ("_list_at", [$1; $4]) }
 	| expression DOT OPEN_BRK expression CLOSE_BRK {
-	            FUNCTION ("_dict_at", [$1; $4]) }
+	            P_FUN ("_dict_at", [$1; $4]) }
 ;
 
 elemental_type: /* slp_expression */
@@ -102,11 +99,11 @@ elemental_type: /* slp_expression */
 ;
 
 list: /* slp_expression */
-  OPEN_SQRBRK list_contents CLOSE_SQRBRK      { LIST $2 }
+  OPEN_SQRBRK list_contents CLOSE_SQRBRK        { P_LIST $2 }
 ;
 
 dict: /* slp_expression */
-  OPEN_BRK dict_contents CLOSE_BRK            { DICT $2 }
+  OPEN_BRK dict_contents CLOSE_BRK              { P_DICT $2 }
 ;
 
 list_contents: /* list of slp_expression */ 
@@ -122,13 +119,13 @@ dict_contents: /* list of (string * slp_expression ) */
 ;
   
 dict_tuple: /* (string * slp_expression) */
-  string COLON expression                     { $1, $3 }
+  string COLON expression                       { $1, $3 }
 ;
   
 basic_type: /* slp_expression */
-	  numeric                                     { BASIC (Numeric $1) }
-	| literal                                     { BASIC $1 }
-	| boolean                                     { BASIC (Boolean $1) } 
+	  numeric                                     { P_BASIC (Numeric $1) }
+	| literal                                     { P_BASIC $1 }
+	| boolean                                     { P_BASIC (Boolean $1) } 
 ;
 
 numeric: /* slp_numeric */
