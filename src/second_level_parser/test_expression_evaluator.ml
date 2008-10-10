@@ -1,22 +1,10 @@
 open Expression_evaluator;;
+open Flarelib;;
 open OUnit;;
 
-let test_file_result ="<html>
-	<head>
-		<title> 10 </title>
-		                            
-	</head>
-	<body>
-		50.50
-		Content content content
-		holamundo
-		cmundo
-		true
-		false
-		false
-		
-	</body>
-</html>                        ";;
+
+let test_file_result =file_to_stringf "test_expression_evaluator_result.html";;
+
 
 let tests = "Expression Evaluator" >:::
   [
@@ -26,7 +14,7 @@ let tests = "Expression Evaluator" >:::
         (peval "5+5")
         ~msg: "Numeric Parse - int";
       assert_equal
-        ("50.50")
+        ("50.5")
         (peval "101.0/2.0")
         ~msg: "Numeric Parse - float";
       assert_equal
@@ -43,18 +31,18 @@ let tests = "Expression Evaluator" >:::
         ~msg: "Comparative Parse";
 			assert_equal
 				("true")
-				(peval "5+5<=1 and 5+5<=29")
+				(peval "5+5<=10 and 5+5<=29")
 				~msg: "Logical Parse";
 			assert_equal
 				("false")
-				(peval "\"hola\"<\"a\"")
+				(peval " \"hola\" < \"a\" ")
 				~msg: "String Compar Parse";
 				
     );
 		"File Evaluator Tests" >:: (fun () ->
 			assert_equal
 				(test_file_result)
-				(parse_file "test_expression_evaluator.html")
+				(parse_string (file_to_stringf "test_expression_evaluator.html"))
 				~msg: "Complete File Test";
 			)
   ];;
