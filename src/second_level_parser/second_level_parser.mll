@@ -6,29 +6,6 @@
   
   let (++) str chr = 
     str ^  (Printf.sprintf "%c" chr);;  
-  
-  (*
-  type slp_token_p =
-    | IDENTIFIER of string
-    (* Basic types operators *)
-    | PLUS | MINUS | TIMES | DIV | MOD | NEG
-    | AND | OR | XOR | NOT
-    | EQL | NOT_EQL | GT | LT | GT_EQ | LT_EQ
-    | CARET
-    (* Control symbols *)
-    | OPEN_PAR | CLOSE_PAR
-    | OPEN_BRK | CLOSE_BRK
-    | OPEN_SQRBRK | CLOSE_SQRBRK
-    | COLON | SEMICOLON
-    | DOT | COMMA 
-    (* Types *)
-    | NUMERIC of slp_numeric
-    | BOOLEAN of bool
-    | STRING of string
-    | CHAR of char
-    (* EOF *)
-    | EOF
-	*)
 
   exception NotTerminatedString;;
 
@@ -82,7 +59,7 @@ rule second_level = parse
   | "xor"     { XOR }
   | "not"     { NOT }
   | "=="      { EQL }
-  | "!="      { NOT_EQL }
+  | "!="      { NEQL }
   | ">"       { GT }
   | "<"       { LT }
   | ">="      { GT_EQ }
@@ -106,10 +83,8 @@ and parse_string acum = parse
       update_newline lexbuf;
       parse_string (acum ^ newline) lexbuf
     }
-  | "\\\\" | "\\\"" as escaped_symbols
-    {
-      parse_string (acum ^ escaped_symbols) lexbuf
-    }
+  | "\\\\" { parse_string (acum ^ "\\") lexbuf }
+  | "\\\"" { parse_string (acum ^ "\"") lexbuf }
   | '"' { acum }
   | _ as raw { parse_string (acum ++ raw) lexbuf }
   | eof { raise NotTerminatedString }
