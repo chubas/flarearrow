@@ -121,7 +121,9 @@ and parse_string tokens acum mode mem_pos quote_pos = parse
       update_newline lexbuf;
       parse_string tokens (acum ^ newline) mode mem_pos quote_pos lexbuf
     }
-  | "\\\"" | "}}" | "#}" as escaped_symbols
+  | "\\\\" { parse_string tokens (acum ^ "\\") mode mem_pos quote_pos lexbuf }
+  | "\\\"" { parse_string tokens (acum ^ "\"") mode mem_pos quote_pos lexbuf }
+  | ("}}" | "#}") as escaped_symbols
     {
       parse_string tokens (acum ^ escaped_symbols) mode mem_pos quote_pos lexbuf
     }
