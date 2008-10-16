@@ -350,10 +350,10 @@ let tests = "Expression Evaluator Tests" >:::
     );
 		"File parsing tests" >:: (fun () ->
 			assert_equal
-				(file_to_stringf "test_expression_evaluator_result.html") 
+				(file_to_string "test_expression_evaluator_result.html") 
 				(parse_file "test_expression_evaluator.html")
 				~msg: "Complete File Test";
     )
   ];;
   
-let _= run_test_tt ~verbose:true tests;;
+let test () = run_test_tt ~verbose:true tests;;

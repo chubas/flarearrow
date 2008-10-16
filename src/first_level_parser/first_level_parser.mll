@@ -151,12 +151,11 @@ and parse_string tokens acum mode mem_pos quote_pos = parse
     in
     sanitize (first_level [] "" RawTextMode (1, 0) lexbuf) [];;
   
-  let tokens_from_file filename = 
-    let lexbuf = Lexing.from_channel (open_in filename) in
-      parse_lexbuf lexbuf;;
-  
   let tokens_from_string str = 
     let lexbuf = Lexing.from_string str in
       parse_lexbuf lexbuf;;
-
+  
+  let tokens_from_file filename = 
+    let str = file_to_string filename in
+    tokens_from_string str;;
 }

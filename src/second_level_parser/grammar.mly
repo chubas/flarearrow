@@ -1,5 +1,5 @@
 %{
-  
+
 open Basic_types;;
 
 exception BadFunction;;
@@ -7,7 +7,6 @@ exception BadArgumentError;;
 exception NotImplementedError;;
 exception TypeMismatchError;;
 
-let string_of_char c = Printf.sprintf "%c" c;;
 
 (*
  *
@@ -30,26 +29,30 @@ let string_of_char c = Printf.sprintf "%c" c;;
 		| _ -> raise TypeMismatchError;
  *****************************************************************************************
 *)
-
 (* Coerces basic numeric operations (+ - * /) for ints and floats *)
 let numeric_operation x y op_int op_float = match x, y with
   | Int a, Int b       -> Int  (op_int a b)
   | Float a, Int b     -> Float(op_float a (float_of_int b))
   | Int a, Float b     -> Float(op_float (float_of_int a) b)
-  | Float a, Float b   -> Float(op_float a b)
-;;
+  | Float a, Float b   -> Float(op_float a b);;
 
-type slp_expression =
-	| P_BASIC of slp_basic_type
-	| P_LIST of slp_ocamlet list
-  | P_DICT of (string * slp_ocamlet) list
-and slp_ocamlet =
+type slp_ocamlet =
   | P_FUN of string * (slp_ocamlet list)
   | P_EXP of slp_expression
+and slp_expression =
+  | P_BASIC of slp_basic_type
+  | P_LIST of slp_ocamlet list
+  | P_DICT of (string * slp_ocamlet) list
 ;;
-
 %}
 
+/*
+%token <string * slp_ocamlet list> P_FUN
+%token <slp_expression> P_EXP
+%token <slp_basic_type> P_BASIC
+%token <slp_ocamlet_list> P_LIST
+%token <(string * slp_ocamlet) list> P_DICT
+*/
 %token <Basic_types.slp_numeric> NUMERIC
 %token <bool> BOOLEAN
 %token <string> STRING

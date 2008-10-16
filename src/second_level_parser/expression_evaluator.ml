@@ -1,8 +1,9 @@
-open Flarelib;;
-open Basic_types;;
+open Basic_types;; 
 open Grammar;;
-open Second_level_parser;;
+open Flarelib;;
+open Second_level_parser;; 
 open First_level_parser;;
+
 
 (* Reduces type that eliminates functions to basic types *)
 type expression =
@@ -11,7 +12,7 @@ type expression =
   | DICT of (string * expression) list
   | NULL
 ;;
-
+ 
 let type_of ?(strict = true) exp = match exp with
   | EXP (Numeric n)         -> if strict then (
     match n with
@@ -137,7 +138,7 @@ _DEFINE_P_FUN "_plus"
     | [EXP (String s); EXP (String t)] ->
         EXP (String (s ^ t))
     | [EXP (String s); EXP (Char t)] ->
-        EXP (String (s ^ (string_of_char t)))
+        EXP (String (s ^ (string_of_char t))) 
     | [EXP (Char t); EXP (String s)] ->
         EXP (String ((string_of_char t) ^ s))
     | [EXP (Char s); EXP (Char t)] ->

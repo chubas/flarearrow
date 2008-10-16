@@ -1,4 +1,4 @@
-open First_level_parser;;
+open First_level_parser;; 
 open OUnit;;
 
 let flp_fixture = "First level parser suite" >:::
@@ -93,7 +93,7 @@ let flp_fixture = "First level parser suite" >:::
           tokens_from_file "foo.bar.baz"
         )
         ~msg:"Non existant files testing";
-      assert_equal
+     assert_equal
         [
           RawText ("<html>\n\t<head>\n\t\t<title> ", Position (1, 0));
 					Expression (" title ", Position (3, 12));
@@ -114,8 +114,8 @@ let flp_fixture = "First level parser suite" >:::
 					RawText ("\n\t</body>\n</html> ", Position (15, 33));
 					Comment (" End of test file ", Position (17, 10))
         ]
-       (tokens_from_file "test_first_level_parser.html") 
+       (tokens_from_file "test_first_level_parser.html")
     )
   ];;
   
-let _= run_test_tt ~verbose:true flp_fixture;;
+let test () = run_test_tt ~verbose:true flp_fixture;;
