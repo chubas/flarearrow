@@ -1,5 +1,5 @@
 { 
-  open Grammar;;
+  open Grammar;; 
   open Basic_types;;
    
   let parse_error s = print_endline s;;

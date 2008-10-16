@@ -16,34 +16,21 @@ let (++) str chr =
 let list_to_string list = 
   List.fold_left (++) "" list
 
-(* Read line by line of the file in an expandable buffer and return the file *)
+let string_of_char char = 
+  Printf.sprintf "%c" char
+
+(* Read line by line of the file in an expandable buffer and return the file*)
 (* contents in a string *)
-let file_to_string channel =
-  let buf = Buffer.create 4096 in
-  let sep = ref "" in
-  let rec loop () = 
-    (* Read a line *)
-    let line = input_line channel in
-    
-    (* Put the newline character (or nothing if it is the first line) *)
-    (* in the buffer *)
-    Buffer.add_string buf !sep;
-    
-    (* Put the line in the buffer *)
-    Buffer.add_string buf line;
-    
-    sep := "\n";
-    (* Continue reading *)
-    loop ()
+let file_to_string filename = 
+    let channel = open_in filename in
+    let buf = Buffer.create 2048 in
+    let rec read () = 
+      Buffer.add_char buf (input_char channel);
+      read ()
     in
-    (* Read the file, and return the contents of the buffer as string
-       when EOF is reached *)
     try
-      loop ()
-    with
-      (* Return the contents of the buffer as a string *)
-      End_of_file -> Buffer.contents buf
-;;
-
-let file_to_stringf filename = file_to_string (open_in filename);;
-
+      read ()
+    with End_of_file -> 
+        close_in channel;
+        Buffer.contents buf
+    ;;
