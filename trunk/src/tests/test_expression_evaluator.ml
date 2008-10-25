@@ -1,4 +1,4 @@
-open Flarelib;;
+open FlareLib;;
 open Basic_types;;
 open Expression_evaluator;;
 open OUnit;;
