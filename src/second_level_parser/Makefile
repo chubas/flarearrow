@@ -15,7 +15,6 @@ build: basic_types.ml grammar.mly second_level_parser.mll expression_evaluator.m
 	$(ML_LIB) expression_evaluator.ml
 	
 tests:
-
 clean:
 	rm basic_types.cmo basic_types.cmi
 	rm grammar.cmo grammar.cmi grammar.ml

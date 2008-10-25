@@ -1,6 +1,6 @@
 open Basic_types;; 
 open Grammar;;
-open Flarelib;;
+open FlareLib;;
 open Second_level_parser;; 
 open First_level_parser;;
 

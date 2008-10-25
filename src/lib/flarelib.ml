@@ -5,19 +5,21 @@
 let rec string_to_list_aux string start finish accum =
   if start <= finish then 
     string_to_list_aux string (start+1) finish ((String.get string start)::accum)
-  else accum
+  else accum;;
 
 let string_to_list string =
-  List.rev (string_to_list_aux string 0 ((String.length string)-1) [])
+  List.rev (string_to_list_aux string 0 ((String.length string)-1) []);;
   
-let (++) str chr = 
-  str ^  (Printf.sprintf "%c" chr);;
+let (++) str char = 
+  str ^  (Printf.sprintf "%c" char);;
+
+let string_of_char chr = 
+  Printf.sprintf "%c" chr;;
 
 let list_to_string list = 
-  List.fold_left (++) "" list
+  List.fold_left (++) "" list;;
 
-let string_of_char char = 
-  Printf.sprintf "%c" char
+
 
 (* Read line by line of the file in an expandable buffer and return the file*)
 (* contents in a string *)
