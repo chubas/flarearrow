@@ -28,9 +28,14 @@
    * Access
  * ~~*Expressions with Lists and Dictionaries*~~: The expressions with lists and dictionaries in the template language allow you to obtain an element from them, it should have an homogeneous notation
 
- * *Web Server*: The Web server receives Get requests asking for static content (html, txt, css, js, jpeg, png and gif). If it doesn't find the required resource, it returns a 404 page(Not Found).
+ * ~~*Web Server*~~: The Web server receives Get requests asking for static content (html, txt, css, js, jpeg, png and gif). If it doesn't find the required resource, it returns a 404 page(Not Found).
 
- * *Configuration File*: The configurable details of the web server (port number, main directory) are read from a configuration file. This file can be plain text, XML, YAML, etc.
+ * ~~*Configuration File*~~: The configurable details of the web server (port number, main directory) are read from a configuration file. This file can be plain text, XML, YAML, etc.
 
- * *Post Method*: The Web server receives requests through POST requests. If a request, which is not GET or POST type, arrives, the server returns a 405 page(Method not allowed) which includes the Allow header, and the body contains an error message with a description.
-  
+ * ~~*Post Method*~~: The Web server receives requests through POST requests. If a request, which is not GET or POST type, arrives, the server returns a 405 page(Method not allowed) which includes the Allow header, and the body contains an error message with a description.
+
+ * *Controller*: The web server can receive special requests that identify a controller. A controller is a program in the host language (OCaml) that gives then the execution flow to a view. The controller sends to the template an association list with the variables-values wanted.
+
+ * *Parameters*: The controllers receive an association list with request parameters, no matter if they are GET or POST
+
+ * *Headers*: The controllers receive an association list with request headers, and the controller can indicate the headers of the response.
