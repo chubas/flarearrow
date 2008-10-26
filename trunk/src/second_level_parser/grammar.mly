@@ -41,6 +41,7 @@ type slp_ocamlet =
   | P_EXP of slp_expression
 and slp_expression =
   | P_BASIC of slp_basic_type
+  | P_VAR of string
   | P_LIST of slp_ocamlet list
   | P_DICT of (string * slp_ocamlet) list
 ;;
@@ -137,7 +138,8 @@ basic_exp: /* slp_ocamlet */
 elemental_type: /* slp_expression */
 	  list                                        { $1 }
 	| dict                                        { $1 }
-	| basic_type                                  { $1 } 
+	| basic_type                                  { $1 }
+  | variable                                    { $1 }
 ;
 
 list: /* slp_expression */
@@ -165,10 +167,10 @@ dict_tuple: /* (string * slp_expression) */
 ;
 
 basic_type: /* slp_expression */
-    numeric                    { P_BASIC (Numeric $1) }
-  | boolean                    { P_BASIC (Boolean $1) }  
-  | string                     { P_BASIC (String  $1) }
-  | char                       { P_BASIC (Char    $1) }
+    numeric                    { P_BASIC (Numeric   $1) }
+  | boolean                    { P_BASIC (Boolean   $1) }  
+  | string                     { P_BASIC (String    $1) }
+  | char                       { P_BASIC (Char      $1) }
 ;
 
 numeric:
@@ -185,4 +187,8 @@ string:
   
 char:
   CHAR       { $1 }
+;
+
+variable:
+  IDENTIFIER { P_VAR $1 }
 ;

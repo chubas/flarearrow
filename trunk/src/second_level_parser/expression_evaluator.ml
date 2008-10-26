@@ -1,6 +1,6 @@
 open Basic_types;; 
 open Grammar;;
-open FlareLib;;
+open Flarelib;;
 open Second_level_parser;; 
 open First_level_parser;;
 
@@ -66,6 +66,7 @@ exception IndexOutOfBoundsException of (expression * int * int);;
                                       (* function, type *)
 exception NotSupportedTypeException of string * string;;
 exception UnknownException;;
+exception UnboundVariable of string;;
 
 (* Hashtable that contains custom function definitions *)
 let _P_FUNS_HASHTABLE = Hashtbl.create 50;;
@@ -76,7 +77,7 @@ let _P_FUNS_HASHTABLE = Hashtbl.create 50;;
  * The function should receive as parameter a list of slp_expressions and
  * return an slp_expression
  *)
-let _DEFINE_P_FUN name funct =
+let _DEFINE_P_FUN (name:string) (funct:(expression list -> expression)) =
   if Hashtbl.mem _P_FUNS_HASHTABLE name then
     raise (BoundFunctionError name)
   else
@@ -87,29 +88,40 @@ let _DEFINE_P_FUN name funct =
  * or throwing an exception if the function is not defined
  * The parameters are each evaluated in case any of them is a function itself.
  *)
-let rec _EVAL_P_FUN identifier params = (try
-    (Hashtbl.find _P_FUNS_HASHTABLE identifier) (reduce_eval_list params)
+let rec _EVAL_P_FUN identifier ?(params = []) fun_params = (try
+    (Hashtbl.find _P_FUNS_HASHTABLE identifier) (reduce_eval_list fun_params params)
   with 
   | Not_found -> raise (NotDeclaredFunctionError identifier)
 )
 (* 
  * Transform from slp_ocamlets to expressions, with all
- * FUNCTION evaluated
+ * P_FUN evaluated and P_VAR bound
  *)
-and reduce_eval_list lst =
+and reduce_eval_list lst params =
   List.map (function
-    | P_EXP (P_LIST  l)   -> LIST (reduce_eval_list l)
-    | P_EXP (P_DICT  d)   -> DICT (reduce_eval_dict d)
+    | P_EXP (P_VAR key)  ->
+      (try 
+        let value = List.assoc key params in
+          value
+	    with Not_found ->
+        raise (UnboundVariable key)) 
+    | P_EXP (P_LIST  l)   -> LIST (reduce_eval_list l params)
+    | P_EXP (P_DICT  d)   -> DICT (reduce_eval_dict d params)
     | P_EXP (P_BASIC b)   -> EXP b
-    | P_FUN (str, par)    -> _EVAL_P_FUN str par
+    | P_FUN (str, par)    -> _EVAL_P_FUN str par ~params:params
   ) lst
 
-and reduce_eval_dict dict =
+and reduce_eval_dict dict params =
   List.map (function
-    | id, P_EXP (P_LIST  l) -> id, LIST (reduce_eval_list l)
-    | id, P_EXP (P_DICT  d) -> id, DICT (reduce_eval_dict d)
-    | id, P_EXP (P_BASIC b) -> id, EXP b
-    | id, P_FUN (str,  par) -> id, _EVAL_P_FUN str par
+    | id, P_EXP (P_VAR   k) -> (try 
+        let value = List.assoc k params in
+          id, value
+	    with Not_found ->
+        raise (UnboundVariable k)) 
+    | id, P_EXP (P_LIST  l) -> id, LIST (reduce_eval_list l params)
+    | id, P_EXP (P_DICT  d) -> id, DICT (reduce_eval_dict d params)
+    | id, P_EXP (P_BASIC b) -> id, EXP  b
+    | id, P_FUN (str,  par) -> id, _EVAL_P_FUN str par ~params:params
   ) (sanitize_dict dict)
 ;;
 
@@ -379,10 +391,10 @@ _DEFINE_P_FUN "_dict_at"
  * This was intended for non-last ocamlets to be used in declarations 
  * or control structures later.
  *)
-let eval_expression str =
+let eval_expression str params =
   let lexbuf = Lexing.from_string str in
   let ocamlets = parse_ocamlet second_level lexbuf in
-  let results = rl ocamlets in
+  let results = rl ocamlets params in
   List.hd (List.rev results)
 ;;
 
@@ -416,33 +428,42 @@ let rec string_of_expression expression =
   | EXP(Char c)                 -> string_of_char c
   | EXP(String s)               -> s
   | LIST l                      -> string_of_expression_list l
-  | DICT d                      -> string_of_expression_dict d
+  | DICT d                      -> string_of_expression_dict d 
   | NULL                        -> "null"
 ;;
 
 
-let print_ocamlet_evaluation str =
-  string_of_expression (eval_expression str)
+let print_ocamlet_evaluation str params =
+  string_of_expression (eval_expression str params)
 ;;
 
 let peval = print_ocamlet_evaluation;;
 
-let parse_string str =
+let parse_string str params =
 	let fl_tokens = tokens_from_string str in
 	String.concat "" (
 			List.map (function
 				| RawText (str, _) -> str
 				| Comment (str, _) -> String.make (String.length str) ' '
-				| Expression (str, _) -> peval str
+				| Expression (str, _) -> peval str params
 		  ) fl_tokens
 		);;
 
-let parse_file file =
+let parse_file file params =
 	let fl_tokens = tokens_from_file file in
 	String.concat "" (
 			List.map (function
 				| RawText (str, _) -> str
 				| Comment (str, _) -> String.make (String.length str) ' '
-				| Expression (str, _) -> peval str
+				| Expression (str, _) -> peval str params
 		  ) fl_tokens
 		);;
+
+let peval_no_params str =
+  print_ocamlet_evaluation str []
+;;
+
+
+let eval_expression_no_params str =
+  eval_expression str []
+;;

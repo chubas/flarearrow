@@ -34,11 +34,11 @@ tests: 	build							\
 		test_first_level_parser.html			\
 		test_expression_evaluator.html			\
 		test_expression_evaluator_result.html
-	cd ../web_server; ./server
+	#cd ../web_server; ./server
 	./test_all
-	$(ECHO) "(!!!) TODO:"
-	$(ECHO) "(!!!) Make sure to kill server process after the tests!"
-	python test_web_server.py
+	#$(ECHO) "(!!!) TODO:"
+	#$(ECHO) "(!!!) Make sure to kill server process after the tests!"
+	#python test_web_server.py
 
 clean:
 	rm test_all test_all.cmo test_all.cmi
