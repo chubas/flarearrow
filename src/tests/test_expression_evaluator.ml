@@ -352,11 +352,23 @@ let tests = "Expression Evaluator Tests" >:::
       assert_equal
         "20"
         (peval "2 * num"
-          [  ("num", EXP (Numeric (Int 10)));
-             ("lala", EXP(Boolean true))
+          [ ("num", EXP (Numeric (Int 10)));
+            ("lala", EXP (Boolean true))
           ]
         )
         ~msg: "Variable binding";
+      assert_equal 
+        "hello world"
+        (peval "h + ' ' + w"
+          [ ("h", EXP (String "hello"));
+            ("w", EXP (String "world"))
+          ] 
+        )
+        ~msg: "Multiple variable binding";
+      assert_raises
+        (UnboundVariable "foo")
+        (fun () -> peval "1 + foo" [])
+        ~msg: "Unbound variable testing"
     );
 		"File parsing tests" >:: (fun () ->
 			assert_equal
