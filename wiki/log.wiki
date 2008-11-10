@@ -114,8 +114,50 @@
   * Results: Created unit tests
 
 == Oct 6 - 08 ==
-  * Date: oct 05 - 08
+  * Date: oct 06 - 08
   * Duration: 5 hours
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: Implementation of the parser and more changes to the lexer 
   * Results: Added a parser and a more recent lexer
+
+== Oct 15 - 08 ==
+  * Date: oct 15 - 08
+  * Duration: 3 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the server 
+  * Results: Added part of the server
+
+== Oct 16 - 08 ==
+  * Date: oct 16 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of parts of the server 
+  * Results: Finished the GET method
+
+== Oct 17 - 08 ==
+  * Date: oct 17 - 08
+  * Duration: 5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the POST Method 
+  * Results: Understand why POST wasn't working   
+
+== Oct 18 - 08 ==
+  * Date: oct 18 - 08
+  * Duration: 5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the POST Method 
+  * Results:
+
+== Oct 20 - 08 ==
+  * Date: oct 20 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the POST Method 
+  * Results:
+
+== Oct 21 - 08 ==
+  * Date: oct 21 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of the POST Method 
+  * Results: POST method implemented
