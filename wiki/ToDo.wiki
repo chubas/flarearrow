@@ -34,8 +34,12 @@
 
  * ~~*Post Method*~~: The Web server receives requests through POST requests. If a request, which is not GET or POST type, arrives, the server returns a 405 page(Method not allowed) which includes the Allow header, and the body contains an error message with a description.
 
- * *Controller*: The web server can receive special requests that identify a controller. A controller is a program in the host language (OCaml) that gives then the execution flow to a view. The controller sends to the template an association list with the variables-values wanted.
+ * ~~*Controller*~~: The web server can receive special requests that identify a controller. A controller is a program in the host language (OCaml) that gives then the execution flow to a view. The controller sends to the template an association list with the variables-values wanted.
 
- * *Parameters*: The controllers receive an association list with request parameters, no matter if they are GET or POST
+ * ~~*Parameters*~~: The controllers receive an association list with request parameters, no matter if they are GET or POST
 
- * *Headers*: The controllers receive an association list with request headers, and the controller can indicate the headers of the response.
+ * ~~*Headers*~~: The controllers receive an association list with request headers, and the controller can indicate the headers of the response.
+
+ * *Conditionals*: The template language includes a mechanism to include or not certain elements of a page based on a conditions.
+
+ * *Cycles*: The template language has a mechanism to easily iterate over all elements in a list or a dictionary.
