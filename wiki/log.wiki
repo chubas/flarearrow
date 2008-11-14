@@ -170,10 +170,8 @@
   * Results: Design complete
 
 == Nov 14 - 08 ==
-  * Date: nov 13 - 08
+  * Date: nov 14 - 08
   * Duration: 4 hours
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: Implementation of conditionals and cycles  
   * Results: Conditionals and Cycles implemented
-
-
