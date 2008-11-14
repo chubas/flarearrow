@@ -1,4 +1,4 @@
-#labels log,reporting
+#labels log,activities,done
 *We are not done yet!*
 
 = Log of activities =
@@ -161,3 +161,19 @@
   * People present: Rubén, Benjamín, Rogelio, Victor
   * Problems Faced: Implementation of the POST Method 
   * Results: POST method implemented
+
+== Nov 13 - 08 ==
+  * Date: nov 13 - 08
+  * Duration: 2.5 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Designing conditionals and cycles for the templates  
+  * Results: Design complete
+
+== Nov 14 - 08 ==
+  * Date: nov 13 - 08
+  * Duration: 4 hours
+  * People present: Rubén, Benjamín, Rogelio, Victor
+  * Problems Faced: Implementation of conditionals and cycles  
+  * Results: Conditionals and Cycles implemented
+
+
