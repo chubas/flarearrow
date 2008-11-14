@@ -96,9 +96,11 @@ expression: /* slp_ocamlet */
   | funct                         { $1 }
   | basic_exp                     { $1 }
   | elemental_type                { P_EXP $1 }  
+;
 
 parenthesized_exp: /* slp_ocamlet */
     OPEN_PAR expression CLOSE_PAR { $2 }
+;
 
 funct: /* slp_ocamlet */
   | IDENTIFIER OPEN_PAR list_contents CLOSE_PAR     { P_FUN ($1, $3) }
@@ -106,6 +108,7 @@ funct: /* slp_ocamlet */
 	            P_FUN ("_list_at", [$1; $4]) }
 	| single_exp DOT OPEN_BRK expression CLOSE_BRK {
 	            P_FUN ("_dict_at", [$1; $4]) }
+;
 
 /* Created to resolve shift/resolve conflict in functions */
 /* i.e., there was a shift/reduce conflict in 1 + [2].[3] */
