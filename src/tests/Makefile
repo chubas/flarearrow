@@ -13,6 +13,10 @@ build: 	test_first_level_parser.ml \
 		-linkpkg
 	$(OCAMLFIND) $(OCAMLC) -c \
 		-package $(OUNIT)				\
+		test_control_blocks.ml			\
+		-linkpkg
+	$(OCAMLFIND) $(OCAMLC) -c \
+		-package $(OUNIT)				\
 		test_expression_evaluator.ml			\
 		-linkpkg
 	$(OCAMLFIND) $(OCAMLC) \
@@ -20,6 +24,7 @@ build: 	test_first_level_parser.ml \
 		flarelib.cmo					\
 		first_level_parser.cmo				\
 		test_first_level_parser.cmo			\
+		test_control_blocks.cmo			\
 		basic_types.cmo					\
 		grammar.cmo					\
 		second_level_parser.cmo				\
@@ -43,4 +48,5 @@ tests: 	build							\
 clean:
 	rm test_all test_all.cmo test_all.cmi
 	rm test_expression_evaluator.cmo test_expression_evaluator.cmi
+	rm test_control_blocks.cmo test_control_blocks.cmi
 	rm test_first_level_parser.cmo test_first_level_parser.cmi
