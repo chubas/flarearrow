@@ -1,29 +1,33 @@
+open Position;;
+open Grammar_flp;;
 open First_level_parser;; 
 open OUnit;;
 
+let tfl s = sanitized_first_level (Lexing.from_string s)
+
 let flp_fixture = "First level control blocks suite" >:::
   [
-    "Simple tests" >:: (fun () ->
+    "Lexing tests" >:: (fun () ->
       assert_equal
-        [ControlIf " not true "]
-        (tokens_from_string "{% if not true %}")
+        [P_CONTROLIF ("not true ", Position (1, 2)); EOF]
+        (tfl "{% if not true %}")
         ~msg:"If test";
       assert_equal
-        [ControlFor " something "]
-        (tokens_from_string "{% for something %}")
+        [P_CONTROLFOR ("something ", Position (1, 2)); EOF]
+        (tfl "{% for something %}")
         ~msg:"For test";
       assert_equal
-        [ControlElse]
-        (tokens_from_string "{% else %}")
+        [P_CONTROLELSE (Position (1, 2)); EOF]
+        (tfl "{% else %}")
         ~msg:"Else test";
       assert_equal
-        [EndIf]
-        (tokens_from_string "{% endif %}")
-        ~msg:"Endif test";
+        [P_CONTROLENDIF (Position (1, 2)); EOF]
+        (tfl "{% endif %}")
+        ~msg:"P_CONTROLENDIF test";
       assert_equal
-        [EndFor]
-        (tokens_from_string "{% endfor %}")
-        ~msg:"Endfor test"
+        [P_CONTROLENDFOR (Position (1, 2)); EOF]
+        (tfl "{% endfor %}")
+        ~msg:"P_CONTROLENDFOR test"
     )
   ];;
   

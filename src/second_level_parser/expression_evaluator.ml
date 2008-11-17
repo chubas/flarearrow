@@ -1,8 +1,10 @@
 open Basic_types;; 
 open Grammar;;
 open Flarelib;;
-open Second_level_parser;; 
+open Second_level_parser;;
+open Grammar_flp;; 
 open First_level_parser;;
+open Template_evaluator;;
 
 
 (* Reduces type that eliminates functions to basic types *)
@@ -443,9 +445,10 @@ let parse_string str params =
 	let fl_tokens = tokens_from_string str in
 	String.concat "" (
 			List.map (function
-				| RawText (str, _) -> str
-				| Comment (str, _) -> String.make (String.length str) ' '
-				| Expression (str, _) -> peval str params
+				| RAWTEXT (str, _) -> str
+				| COMMENT (str, _) -> String.make (String.length str) ' '
+				| EXPRESSION (str, _) -> peval str params
+        (* | LOOP _ | CONDITIONAL _ -> Do something *)
 		  ) fl_tokens
 		);;
 
@@ -453,9 +456,9 @@ let parse_file file params =
 	let fl_tokens = tokens_from_file file in
 	String.concat "" (
 			List.map (function
-				| RawText (str, _) -> str
-				| Comment (str, _) -> String.make (String.length str) ' '
-				| Expression (str, _) -> peval str params
+				| RAWTEXT (str, _) -> str
+				| COMMENT (str, _) -> String.make (String.length str) ' '
+				| EXPRESSION (str, _) -> peval str params
 		  ) fl_tokens
 		);;
 

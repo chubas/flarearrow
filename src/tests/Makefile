@@ -22,7 +22,10 @@ build: 	test_first_level_parser.ml \
 	$(OCAMLFIND) $(OCAMLC) \
 		-o test_all					\
 		flarelib.cmo					\
+		position.cmo				\
+		grammar_flp.cmo				\
 		first_level_parser.cmo				\
+		template_evaluator.cmo				\
 		test_first_level_parser.cmo			\
 		test_control_blocks.cmo			\
 		basic_types.cmo					\
