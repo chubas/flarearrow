@@ -23,7 +23,9 @@ build: yaml_config_parser.ml server_utils.ml server.ml
 	$(OCAMLFIND) $(OCAMLC) -o server		\
 		-package $(WEB_PKG)	-thread		\
 		flarelib.cmo				\
-		first_level_parser.cmo				\
+		grammar_flp.cmo		\
+		first_level_parser.cmo		\
+		template_evaluator.cmo		\
 		basic_types.cmo					\
 		grammar.cmo					\
 		second_level_parser.cmo				\
