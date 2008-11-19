@@ -69,6 +69,8 @@ exception IndexOutOfBoundsException of (expression * int * int);;
 exception NotSupportedTypeException of string * string;;
 exception UnknownException;;
 exception UnboundVariable of string;;
+exception DuplicatedVariableName of string;;
+exception UnsupportedIterable of expression;;
 
 (* Hashtable that contains custom function definitions *)
 let _P_FUNS_HASHTABLE = Hashtbl.create 50;;
@@ -91,7 +93,8 @@ let _DEFINE_P_FUN (name:string) (funct:(expression list -> expression)) =
  * The parameters are each evaluated in case any of them is a function itself.
  *)
 let rec _EVAL_P_FUN identifier ?(params = []) fun_params = (try
-    (Hashtbl.find _P_FUNS_HASHTABLE identifier) (reduce_eval_list fun_params params)
+    (Hashtbl.find _P_FUNS_HASHTABLE identifier)
+      (reduce_eval_list fun_params params)
   with 
   | Not_found -> raise (NotDeclaredFunctionError identifier)
 )
@@ -441,26 +444,70 @@ let print_ocamlet_evaluation str params =
 
 let peval = print_ocamlet_evaluation;;
 
+let rec eval_params tokens params = 
+	let rec eval_action actionparams action = match action with
+	  | RAWTEXT (str, _) -> str
+	  | COMMENT (str, _) -> String.make (String.length str) ' '
+		| EXPRESSION (str, _) -> peval str params
+	  | CONDITIONAL ((str, _), ifaction, elseaction) ->
+	    (match _BOOL_OF_EXP (eval_expression str actionparams) with
+				| true -> eval_params ifaction actionparams
+				| false -> eval_params elseaction actionparams)
+    | LOOP ((iterable_str, list_of_vars, _), actions) -> 
+      (* Check for shadowed parameters *)
+      let duperror = function key -> 
+          if List.mem_assoc key params then raise (DuplicatedVariableName key) in 
+        List.iter duperror list_of_vars;
+      (* Check for iterable *)
+      let iterable = (eval_expression iterable_str actionparams) in
+      (match iterable with
+        | DICT list_of_exps -> (match list_of_vars with
+            | [k; v] ->
+                String.concat ""
+                  (List.map 
+                    (function dictkey, dictval ->
+                      eval_params actions
+                        ((k, EXP (String dictkey))::(v, dictval)::actionparams)) 
+                    list_of_exps
+                  ) 
+            | badparams -> raise (InvalidNumberOfParameters (2, List.length badparams)) 
+          ) 
+        | LIST list_of_exps -> (match list_of_vars with
+            | [itervar] -> 
+                String.concat ""
+                  (List.map
+                    (function v -> eval_params actions ((itervar, v)::actionparams))
+                    list_of_exps
+                  )
+            | badparams -> raise (InvalidNumberOfParameters (1, List.length badparams))
+          )
+        | EXP (String s) -> (match list_of_vars with
+            | [itervar] ->
+                let chars = string_to_list s in 
+                String.concat ""
+                  (List.map
+                    (function ch -> eval_params actions
+                      ((itervar, EXP (Char ch))::actionparams))
+                    chars
+                  )
+            | badparams -> raise (InvalidNumberOfParameters (1, List.length badparams))
+          )
+        | _ -> raise (UnsupportedIterable iterable)
+      )
+  in
+  let curried_eval = eval_action params in
+  String.concat "" (List.map curried_eval tokens)
+;; 
+
 let parse_string str params =
-	let fl_tokens = tokens_from_string str in
-	String.concat "" (
-			List.map (function
-				| RAWTEXT (str, _) -> str
-				| COMMENT (str, _) -> String.make (String.length str) ' '
-				| EXPRESSION (str, _) -> peval str params
-        (* | LOOP _ | CONDITIONAL _ -> Do something *)
-		  ) fl_tokens
-		);;
+  let fl_tokens = tokens_from_string str in
+  eval_params fl_tokens params;
+;;
 
 let parse_file file params =
-	let fl_tokens = tokens_from_file file in
-	String.concat "" (
-			List.map (function
-				| RAWTEXT (str, _) -> str
-				| COMMENT (str, _) -> String.make (String.length str) ' '
-				| EXPRESSION (str, _) -> peval str params
-		  ) fl_tokens
-		);;
+  let fl_tokens = tokens_from_file file in
+  eval_params fl_tokens params
+;;
 
 let peval_no_params str =
   print_ocamlet_evaluation str []
@@ -470,3 +517,4 @@ let peval_no_params str =
 let eval_expression_no_params str =
   eval_expression str []
 ;;
+

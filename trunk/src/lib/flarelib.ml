@@ -1,13 +1,11 @@
 (********************* AUXILIARY FUNCTIONS  *******************)
 (* Here until we find or implement better versions *)
 
-
-let rec string_to_list_aux string start finish accum =
-  if start <= finish then 
-    string_to_list_aux string (start+1) finish ((String.get string start)::accum)
-  else accum;;
-
 let string_to_list string =
+  let rec string_to_list_aux string start finish accum =
+	  if start <= finish then 
+	    string_to_list_aux string (start+1) finish ((String.get string start)::accum)
+	  else accum in
   List.rev (string_to_list_aux string 0 ((String.length string)-1) []);;
   
 let (++) str char = 
