@@ -6,6 +6,7 @@ all: build
 
 build: 	test_first_level_parser.ml \
 		test_expression_evaluator.ml			\
+		test_control_blocks.ml \
 		test_all.ml
 	$(OCAMLFIND) $(OCAMLC) -c \
 		-package $(OUNIT)				\
@@ -27,11 +28,11 @@ build: 	test_first_level_parser.ml \
 		first_level_parser.cmo				\
 		template_evaluator.cmo				\
 		test_first_level_parser.cmo			\
-		test_control_blocks.cmo			\
 		basic_types.cmo					\
 		grammar.cmo					\
 		second_level_parser.cmo				\
 		expression_evaluator.cmo			\
+		test_control_blocks.cmo			\
 		test_expression_evaluator.cmo			\
 		-package $(OUNIT)				\
 		test_all.ml					\
