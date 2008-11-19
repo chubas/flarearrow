@@ -13,9 +13,13 @@ let flp_fixture = "First level control blocks suite" >:::
         (tfl "{% if not true %}")
         ~msg:"If test";
       assert_equal
-        [P_CONTROLFOR ("something ", Position (1, 2)); EOF]
-        (tfl "{% for something %}")
-        ~msg:"For test";
+        [P_CONTROLFOR ("something ", ["var"], Position (1, 2)); EOF]
+        (tfl "{% for var in something %}")
+        ~msg:"For test (one variable)";
+      assert_equal
+        [P_CONTROLFOR ("something ", ["a"; "b"], Position (1, 2)); EOF]
+        (tfl "{% for a,b in something %}")
+        ~msg:"For test (two variables)";
       assert_equal
         [P_CONTROLELSE (Position (1, 2)); EOF]
         (tfl "{% else %}")

@@ -9,7 +9,7 @@
     | P_EXPRESSION of string * flp_position
     | P_RAWTEXT of string * flp_position
     | P_CONTROLIF of string * flp_position
-    | P_CONTROLFOR of string * flp_position
+    | P_CONTROLFOR of string * (string list) * flp_position
     | P_CONTROLELSE of flp_position
     | P_CONTROLENDIF of flp_position
     | P_CONTROLENDFOR of flp_position
@@ -24,7 +24,7 @@
     | CommentMode
     | ExpressionMode
     | RawTextMode
-    | ControlIfMode | ControlForMode
+    | ControlIfMode | ControlForMode of (string list)
   ;;
 
   exception NotTerminatedComment of flp_position;;
@@ -52,6 +52,9 @@
 
 let newline_chars = ('\010'|'\013'|"\013\010")
 let begin_control = "{%" [' ' '\t']*
+let digit = ['0'-'9']
+let char_id = ['A'-'Z' 'a'-'z' '_']
+let identifier_seq = char_id ( (char_id | digit)* )*
 
 rule first_level tokens acum mode mem_pos = parse
   | newline_chars as newline
@@ -145,15 +148,22 @@ rule first_level tokens acum mode mem_pos = parse
           first_level
             tokens (acum ^ _s) mode mem_pos lexbuf   
     }
-  | begin_control "for" [' ' '\t']+ as _s 
+  | (begin_control "for" [' ' '\t']+
+    (identifier_seq as first_var) [' ' '\t']* 
+    (',' [' ' '\t']* (identifier_seq as second_var))?
+    [' ' '\t']* "in" [' ' '\t']* )as _s 
     {
       match mode with
-        | RawTextMode -> 
+        | RawTextMode ->
+            let vars = (match second_var with
+              | Some s -> [first_var; s]
+              | None -> [first_var]
+            ) in
             let line, col = current_position lexbuf in
             let begin_for = col - (String.length _s) + 2 in
             first_level
               ((P_RAWTEXT (acum, Position mem_pos))::tokens)
-              "" ControlForMode (line, begin_for) lexbuf
+              "" (ControlForMode vars) (line, begin_for) lexbuf
         | _ -> 
           first_level
             tokens (acum ^ _s) mode mem_pos lexbuf   
@@ -194,9 +204,9 @@ rule first_level tokens acum mode mem_pos = parse
           first_level
             ((P_CONTROLIF (acum, Position mem_pos))::tokens)
             "" RawTextMode (current_position lexbuf) lexbuf
-        | ControlForMode ->
+        | ControlForMode vars ->
           first_level
-            ((P_CONTROLFOR (acum, Position mem_pos))::tokens)
+            ((P_CONTROLFOR (acum, vars, Position mem_pos))::tokens)
             "" RawTextMode (current_position lexbuf) lexbuf
         | _ ->
           first_level
@@ -215,7 +225,7 @@ rule first_level tokens acum mode mem_pos = parse
             List.rev (EOF::(P_RAWTEXT (acum, Position mem_pos))::tokens)
           | ExpressionMode -> raise (NotTerminatedExpression (Position mem_pos))
           | CommentMode -> raise (NotTerminatedComment (Position mem_pos))
-          | ControlIfMode | ControlForMode -> 
+          | ControlIfMode | (ControlForMode _) -> 
             raise (NotTerminatedControlBlock (Position mem_pos))
       else
         List.rev (EOF::tokens)
@@ -228,7 +238,7 @@ and parse_string tokens acum mode mem_pos quote_pos = parse
     }
   | "\\\\" { parse_string tokens (acum ^ "\\") mode mem_pos quote_pos lexbuf }
   | "\\\"" { parse_string tokens (acum ^ "\"") mode mem_pos quote_pos lexbuf }
-  | ("}}" | "#}") as escaped_symbols
+  | ("}}" | "#}" | "%}") as escaped_symbols
     {
       parse_string tokens (acum ^ escaped_symbols) mode mem_pos quote_pos lexbuf
     }
