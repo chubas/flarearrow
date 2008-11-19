@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>seq result </title>
+  </head>
+  <body>
+    <ul>
+      {% for n in result %}
+	<li>
+	  {{ n }}
+	  {% if (n % 2) == 0 %}
+	    Is even
+	  {% else %}
+	    Is not even
+	  {% endif %}
+	</li>
+      {% endfor %}
+    </ul>
+  <body>
+</html>
