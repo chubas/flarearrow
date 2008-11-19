@@ -7,7 +7,7 @@ type flp_token =
   | EXPRESSION of (string * Position.flp_position)
   | RAWTEXT of (string * Position.flp_position)
   | CONDITIONAL of ((string * Position.flp_position) * (flp_token list) * (flp_token list))
-  | LOOP of ((string * Position.flp_position) * (flp_token list))
+  | LOOP of ((string * (string list) * Position.flp_position) * (flp_token list))
 ;;
 
 (*
@@ -16,7 +16,7 @@ type _fpl_token =
 	| P_EXPRESSION of string * Position.flp_position
 	| P_RAWTEXT of string * Position.flp_position
 	| P_CONTROLIF of string * Position.flp_position
-	| P_CONTROLFOR of string * Position.flp_position
+	| P_CONTROLFOR of string * (string list) * Position.flp_position
 	| P_CONTROLELSE of Position.flp_position
 	| P_CONTROLENDIF of Position.flp_position
 	| P_CONTROLENDFOR of Position.flp_position
@@ -29,7 +29,7 @@ type _fpl_token =
 %token <string * Position.flp_position> P_EXPRESSION
 %token <string * Position.flp_position> P_RAWTEXT
 %token <string * Position.flp_position> P_CONTROLIF
-%token <string * Position.flp_position> P_CONTROLFOR
+%token <string * (string list) * Position.flp_position> P_CONTROLFOR
 %token <Position.flp_position> P_CONTROLELSE
 %token <Position.flp_position> P_CONTROLENDFOR
 %token <Position.flp_position> P_CONTROLENDIF
