@@ -40,6 +40,6 @@
 
  * ~~*Headers*~~: The controllers receive an association list with request headers, and the controller can indicate the headers of the response.
 
- * *Conditionals*: The template language includes a mechanism to include or not certain elements of a page based on a conditions.
+ * ~~*Conditionals*~~: The template language includes a mechanism to include or not certain elements of a page based on a conditions.
 
- * *Cycles*: The template language has a mechanism to easily iterate over all elements in a list or a dictionary.
+ * ~~*Cycles*~~: The template language has a mechanism to easily iterate over all elements in a list or a dictionary.
