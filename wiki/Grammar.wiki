@@ -1,5 +1,5 @@
 #labels Grammar
-=Gramar=
+=Grammar=
 ----
 ==Numbers==
 the operations that should be defined for numbers are _addition_, _subtraction_, _multiplication_, _division_ and _module_. Their use is the following:
