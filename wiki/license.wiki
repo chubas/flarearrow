@@ -8,6 +8,8 @@ Under the [http://www.gnu.org/philosophy/free-sw.html Free Software Definition],
 
 Also, we think that free software allow the program to reach beyond we can do. That is, as seeing a [comparison comparison between some existing OCaml web frameworks], we spotted that collaboration is low or non-existant between developers. We'd like to encourage certain community interested on this project to continue it and make it better. A GPL licence would allow us to do that.
 
+We intend to release software that is free for everyone. Our development team uses free software because we can learn from it, employ it multiple times, and extend it. We consider GNU GPL a great choice, as a way to contribute to the software community and as a way to help innovation among developers.  
+
 [http://www.gnu.org/licenses/gpl.html The GPL V3 License Text]
 
 [http://www.gnu.org/graphics/gplv3-127x51.png]
