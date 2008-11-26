@@ -1,4 +1,4 @@
-LIBS 		= -I ../lib -I ../first_level_parser -I ../second_level_parser -I ../tests
+LIBS 		= -I ../lib -I ../first_level_parser -I ../second_level_parser -I ../tests -I ../../controllers
 OCAMLLEX 	= ocamllex
 OCAMLC 		= ocamlc -g $(LIBS)
 OCAMLFIND	= ocamlfind
