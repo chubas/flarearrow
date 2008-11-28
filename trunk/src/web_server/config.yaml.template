@@ -2,7 +2,7 @@ hostname: localhost
 port: 5000
 static_doc_root: path/to/static/doc/root
 template_dir: path/to/template/dir
-bind: lalalalala.poa((*AS(
+bind: 0.0.0.0:5000
 dbhost: localhost
 dbname: database_name
 dbport: port

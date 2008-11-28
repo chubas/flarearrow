@@ -24,7 +24,8 @@ let template_process
 	    cgi # set_header
 	      ~content_type:"text/html; charset=\"iso-8859-1\""
 	      ();
-      let contents = parse_file (!template_dir ^ template_file) (bind_parameters cgi) in 
+      let contents = parse_file 
+        (!template_dir ^ "/" ^ template_file) (bind_parameters cgi) in 
 	    cgi # output # output_string contents;
       (* (headers cgi); *)
       let env = cgi # environment in
