@@ -1,3 +1,4 @@
+#labels ounit,ocaml,installation,description
 =OUnit=
 
 You can download OUnit from: http://www.xs4all.nl/~mmzeeman/ocaml/
