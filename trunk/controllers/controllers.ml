@@ -103,51 +103,140 @@ let register_controller_params (cgi:cgi_activation) =
          "password", EXP (String "")
         ]
     | `POST ->
-		  let _username = get_variable_or_default cgi "username" in
-		  let _password = get_variable_or_default cgi "password" in
-		  let username = match _username with
-		    | None -> ""
-		    | Some s -> trim s
-		  in
-		  let password = match _password with
-		    | None -> ""
-		    | Some s -> s
-		  in
-		  let errors = ref [] in
-		  let add_error = function e -> errors := e::!errors in
-		  let validate_length s desc = 
-		    match String.length s  with
-		      | 0 -> add_error (desc ^ "cannot be empty")
-		      | n when n < 3 -> add_error (desc ^ " must contain at least 3 characters")
-		      | n when n > 20 -> add_error (desc ^ " must be less than 20 characters")
-		      | _ -> () in
-		  List.iter 
-		    (function s, desc -> validate_length s desc)
-		    [username, "Username"; password, "Password"]; 
-		  if not (is_valid_username username) then
-		    add_error "Username must only contain numbers, letters and underscores"
-		  else ();
-		  
-		  if !errors = [] then
-		    try 
-		      Client_lib.insert_user (get_db ()) username password
-		    with
-		      | Client_lib.DuplicatedUser u -> add_error ("Duplicated username " ^ u);
-		  else ();
-		     
-			[ 
+      let _username = get_variable_or_default cgi "username" in
+      let _password = get_variable_or_default cgi "password" in
+      let username = match _username with
+        | None -> ""
+        | Some s -> trim s
+      in
+      let password = match _password with
+        | None -> ""
+        | Some s -> s
+      in
+      let errors = ref [] in
+      let add_error = function e -> errors := e::!errors in
+      let validate_length s desc = 
+        match String.length s  with
+          | 0 -> add_error (desc ^ "cannot be empty")
+          | n when n < 3 -> add_error (desc ^ " must contain at least 3 characters")
+          | n when n > 20 -> add_error (desc ^ " must be less than 20 characters")
+          | _ -> () in
+      List.iter 
+        (function s, desc -> validate_length s desc)
+        [username, "Username"; password, "Password"]; 
+      if not (is_valid_username username) then
+        add_error "Username must only contain numbers, letters and underscores"
+      else ();
+      
+      if !errors = [] then
+        try 
+          Client_lib.insert_user (get_db ()) username password
+        with
+          | Client_lib.DuplicatedUser u -> add_error ("Duplicated username " ^ u);
+      else ();
+         
+      [ 
         "start", EXP (Boolean false);
-		    "errors", LIST (List.map (function err -> EXP (String err)) !errors);
-			  "username", EXP (String username);
-			  "password", EXP (String password);
-		  ]
+        "errors", LIST (List.map (function err -> EXP (String err)) !errors);
+        "username", EXP (String username);
+        "password", EXP (String password);
+      ]
    | _ -> failwith "Unrecognized request method"
 ;;
 
+let logged_in_user (cgi:cgi_activation) =
+  let cookies = cgi # environment # cookies in
+  try
+    let session_id = List.assoc "flarearrow_session" cookies in
+      Some (Client_lib.retrieve_user (get_db ()) session_id)
+  with
+    | Not_found -> None
+;;
+
+let login_controller_params (cgi:cgi_activation) =
+  match cgi # request_method with
+    | (`GET:request_method) -> 
+        [ "start", EXP (Boolean true);
+          "error", EXP (Boolean false) ] 
+    | (`POST:request_method) ->
+      let _username = get_variable_or_default cgi "username" in
+      let _password = get_variable_or_default cgi "password" in
+      (match (_username, _password) with
+        | None, _ | _, None -> failwith "Required username and password"
+        | Some username, Some password ->
+          ["start", EXP (Boolean false);
+           "error", EXP (Boolean 
+          ( try
+            let db = get_db () in
+            ( match logged_in_user cgi with
+              (* Cookie is already set *)
+              | Some username -> false
+              | None -> 
+                if Client_lib.user_authenticates db username password then
+                  let key = 
+                    Client_lib.pwdstring (string_of_float (Unix.time ())) in
+                  let cookie = { 
+                    cookie_name = "flarearrow_session";
+                        cookie_value = key;
+                        cookie_expires = None (* At browser exit *);
+                        cookie_domain = None;
+                    cookie_path = None;
+                    cookie_secure = false } in 
+                  Client_lib.store_session db key username;
+                  cgi # set_header ~set_cookie:[cookie] ();
+                  false
+                else
+                  true
+            ) 
+          with
+            | e -> print_endline (Printexc.to_string e); failwith "Mysql error"
+        ))]
+      )
+    | _ -> failwith "Unrecognized request method"
+;;
+
+let logout_controller_params (cgi:cgi_activation) =
+  begin 
+    match logged_in_user cgi with
+      | None -> ()
+      | Some username ->
+        ignore (
+          Mysql.exec (get_db ()) 
+            ("delete from sessions where authenticated_user = " ^
+            (Mysql.ml2str username) ^ ";")
+        );
+        let expired_cookie = { 
+          cookie_name = "flarearrow_session";
+		      cookie_value = "";
+		      cookie_expires = Some ((Unix.time ()) -. 10000.); 
+		      cookie_domain = None;
+          cookie_path = None;
+          cookie_secure = false } in 
+        cgi # set_header ~set_cookie:[expired_cookie] ();
+  end;
+  cgi # set_redirection_header "/login";
+  []
+;;    
+
+let play_controller_params (cgi:cgi_activation) =
+  match logged_in_user cgi with
+    | None ->
+        cgi # set_redirection_header "/login";
+        [
+          "username", NULL;
+          "random_word", EXP (String "")
+        ]
+    | Some username ->
+        [ "username", EXP (String username);
+          "random_word",
+            EXP( String (List.nth Client_lib.word_list
+            (Random.int (List.length Client_lib.word_list))))
+        ]
+;;
 
 let handlers = [
-	  template_process "hello_world";
-	  template_process "oper"
+    template_process "hello_world";
+    template_process "oper"
       ~bind_parameters:op_controller_params;
     template_process "headers"
       ~headers:["Content-Type", "text/plain; charset=\"iso-8859-1\""]
@@ -156,4 +245,10 @@ let handlers = [
       ~bind_parameters:numbers_controller_params;
     template_process "register"
       ~bind_parameters:register_controller_params;
+    template_process "play"
+      ~bind_parameters:play_controller_params;
+    template_process "login"
+      ~bind_parameters:login_controller_params;
+    template_process "logout"
+      ~bind_parameters:logout_controller_params;
 ];;

@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Play</title>
+    <script type="text/javascript" src="/prototype.js"></script>
+    <script type="text/javascript">
+      function jsonFlickrApi(rsp) {
+       if (rsp.stat != "ok"){
+        return;
+        /// TODO: Alert that an error has occured
+       }
+       var s = "";
+       for (var i=0; i < rsp.photos.photo.length; i++) {
+        photo = rsp.photos.photo[i];
+        t_url = "http://farm" + photo.farm + 
+        ".static.flickr.com/" + photo.server + "/" + 
+        photo.id + "_" + photo.secret + "_" + "s.jpg";
+                  
+        s +=  '<img src="' + t_url + '"/>';
+       }
+       document.writeln(s); 
+      }
+    </script>
+  </head>
+
+  <body>
+    Hello {{ username }} <br />
+
+    <!-- SCRIPT SECTION -->
+    
+    <script type="text/javascript" 
+      language="javascript" 
+      src="http://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags={{ random_word }}&text={{ random_word }}&tag_mode=all&per_page=36&api_key=3b6c7c141f55fad34ae21ac70ad3dbbc">
+    </script>
+    <form method="post" action="/play">
+      Your guess: <input type="text" name="guess" /> <br />
+      <input type="submit">
+    </form>
+  </body>
+</html>
+
+<!--
+function createFlickerURL(searchTerms, perPage) {
+	//constructs the flickr request URL
+	var URL = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="
+			  + FLICKRKEY +
+			  "&user_id="
+			  + MYUSRID +
+			  "&text="
+			  + searchTerms +
+			  "&per_page="
+			  + perPage +
+			  "&format=json";
+	return encodeURI(URL);
+}
+
+function getSearchResults(searchString, perPage) {
+	//create the api request
+    var flickrRequestURL = createFlickerURL(searchString, perPage);
+    // grab and clear container content...
+	$('flikrHolder').innerHTML = "";
+    // do the api request
+    var script = document.createElement('script');
+    script.src = flickrRequestURL;
+    script.type = 'text/javascript';
+    var head = document.getElementsByTagName('head').item(0);
+    head.appendChild(script);
+    return false;
+}
+
+>

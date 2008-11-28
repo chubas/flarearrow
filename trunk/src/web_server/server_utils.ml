@@ -14,42 +14,44 @@ let template_process
     | "" -> view ^ ".fhtml"
     | e  -> e
   in
-	let uri_path = if path <> "" then path else (
-	  let p = path_file_function view in 
-	  if p <> "" then p else "/" ^ view
-	) in 
-	let process (cgi:cgi_activation) =
-	  try
+  let uri_path = if path <> "" then path else (
+    let p = path_file_function view in 
+    if p <> "" then p else "/" ^ view
+  ) in 
+  let process (cgi:cgi_activation) =
+    try
       (* Default values for pages *)
-	    cgi # set_header
-	      ~content_type:"text/html; charset=\"iso-8859-1\""
-	      ();
-      let contents = parse_file 
-        (!template_dir ^ "/" ^ template_file) (bind_parameters cgi) in 
-	    cgi # output # output_string contents;
+      (* Don't do this. A call to cgi#set_header overwrittes previous calls
+         until cgi # output # commit_work is called *)
+      (*
+        cgi # set_header
+          ~content_type:"text/html; charset=\"iso-8859-1\""
+          ();
+      *)
+      let contents = parse_file (!template_dir ^ "/" ^ template_file) (bind_parameters cgi) in 
+      cgi # output # output_string contents;
       (* (headers cgi); *)
       let env = cgi # environment in
         List.iter (function k, v -> env # set_output_header_field k v) headers;
-
-	    cgi # output # commit_work();
-	  with
-	      error ->
-		      cgi # output # rollback_work();
+      cgi # output # commit_work ();
+    with
+        error ->
+          cgi # output # rollback_work();
           cgi # set_header
-		 	  	  ~status:        `Internal_server_error
-					  ~cache:         `No_cache
-					  ~content_type:  "text/html; charset=\"iso-8859-1\""
-					  ();
-	        cgi # output # output_string (Printexc.to_string error);
-			    cgi # output # commit_work()
+             ~status:        `Internal_server_error
+            ~cache:         `No_cache
+            ~content_type:  "text/html; charset=\"iso-8859-1\""
+            ();
+          cgi # output # output_string (Printexc.to_string error);
+          cgi # output # commit_work()
   in
     (view, uri_path,
-	    { Nethttpd_services.dyn_handler = (fun _ -> process );
-			  dyn_activation = Nethttpd_services.std_activation `Std_activation_buffered;
-		    dyn_uri = None;
-		    dyn_translator = (fun _ -> "");
-		    dyn_accept_all_conditionals = false;
-		  }
+      { Nethttpd_services.dyn_handler = (fun _ -> process );
+        dyn_activation = Nethttpd_services.std_activation `Std_activation_buffered;
+        dyn_uri = None;
+        dyn_translator = (fun _ -> "");
+        dyn_accept_all_conditionals = false;
+      }
     )
 ;;
 
@@ -59,3 +61,4 @@ let get_variable_or_default ?(default = None) (cgi:cgi_activation) var_name =
   with
     | Not_found -> default
 ;;
+
