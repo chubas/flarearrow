@@ -1,0 +1,26 @@
+#labels Install
+Installation Instructions.
+----
+= Linux Instructions =
+  * Download and install the following packages from the repositories or the binaries 
+    * ocaml 
+    * ocaml-base 
+    * ocaml-base-nox 
+    * ocaml-compiler-libs 
+    * ocaml-findlib 
+    * ocaml-interp 
+    * ocaml-native-compilers 
+    * ocaml-nox 
+    * libhttp-ocaml-dev 
+    * libounit-ocaml-dev 
+    * libocamlne
+    * libmysql-ocaml
+    * mysql
+  * Download the Source Code
+  * go to the web_server (src/web_server/) folder of the project and Modify server.conf and configuration_parameters.ml.template
+  * from a Terminal window go to the src (src/) folder of the project and type make
+  * now you can run the server located in the web_server folder   
+
+
+
+= Windows Instructions =
