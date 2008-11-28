@@ -1,3 +1,4 @@
+#labels ocaml,ides
 = OCaml IDEs and Editors =
 
 So far, we've used Gedit, Kate, Vim and Eclipse.
