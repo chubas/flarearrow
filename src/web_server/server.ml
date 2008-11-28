@@ -3,8 +3,6 @@ open Server_config;;
 open Server_utils;;
 open Controllers;;
 
-
-
 let start ?(config_filename = "config.yaml") (_:unit) =
   let start_server () =
     let (opt_list, _) = Netplex_main.args() in
@@ -13,7 +11,9 @@ let start ?(config_filename = "config.yaml") (_:unit) =
         ~config_filename:config_filename
         ~pidfile:None
         ~foreground:true () in
-    let use_mt = ref false in
+
+    (* For using with MySQL using multi-processing throws errors *)
+    let use_mt = ref true in
     let opt_list' =
       [ "-mt", Arg.Set use_mt,
         "  Use multi-threading instead of multi-processing"
@@ -33,8 +33,18 @@ let start ?(config_filename = "config.yaml") (_:unit) =
           read_config_file config_filename in
       let f = fun _ -> config_file in
     *)
-    let template_dir = "home/chubas/Documents/TEC/7moSemestre/Proyecto/flarearrow/trunk/views" in
-    Server_utils.template_dir := template_dir;
+    
+    (* TODO: Change configuration here *)
+    Server_utils.template_dir := Configuration_parameters.template_dir;
+
+    (* Create connection here *)
+    Controllers.db_connection := Some
+    (Controllers.create_db_connection 
+      Configuration_parameters.db_host
+      Configuration_parameters.db_port
+      Configuration_parameters.db_user
+      Configuration_parameters.db_pwd
+      Configuration_parameters.db_dbname);
 
     let nethttpd_factory =
       let handlers = List.map
@@ -59,4 +69,5 @@ let start ?(config_filename = "config.yaml") (_:unit) =
 (* Main start *)
 print_endline "Starting server...";
 start ~config_filename:"server.conf" ()
+
 
