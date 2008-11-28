@@ -1,19 +1,19 @@
 open Mysql;;
 open Flarelib;;
 
-let api_key = "3b6c7c141f55fad34ae21ac70ad3dbbc";;
-let secret  = "7689c959aa5eada2";;
 let salt    = "w00t";;
 
 let pwdstring s = md5 (s ^ salt);;  
 
 exception UserDoesNotExist of string;;
 exception DuplicatedUser of string;;
+exception SessionNotFound;;
 
 let check_user_exists db_connection username =
   let result = 
     Mysql.exec db_connection 
-    ("select count(*) from users where username = " ^ (Mysql.ml2str username))
+    ("select count(*) from users where username like binary " ^ 
+      (Mysql.ml2str username))
   in
     match Mysql.fetch result with
       | None -> assert false
@@ -29,8 +29,8 @@ let check_user_exists db_connection username =
 
 let user_authenticates db_connection username password =
   let result = Mysql.exec db_connection
-    ("select * from users where username = " ^ (Mysql.ml2str username) ^ 
-     " and password = " ^ (Mysql.ml2str (pwdstring password) ^ ";"))
+    ("select * from users where username like binary " ^ (Mysql.ml2str username) ^ 
+     " and password like binary " ^ (Mysql.ml2str (pwdstring password) ^ ";"))
   in
     match Mysql.size result with
       | 0L -> false
@@ -41,7 +41,7 @@ let user_authenticates db_connection username password =
 let user_answered db_connection username is_correct =
   let (current_tries, current_corrects) = 
     let result = Mysql.exec db_connection
-      ("select tries, corrects from users where username = " ^ 
+      ("select tries, corrects from users where username like binary " ^ 
         (Mysql.ml2str username)) in
     match fetch result with
       | None -> raise (UserDoesNotExist username)
@@ -85,3 +85,42 @@ let insert_user db_connection username password =
 	    ";" in
 	  ignore (Mysql.exec db_connection query)
 ;;
+
+let store_session db_connection session_id username =
+  let query = "insert into sessions values " ^
+    (Mysql.values [Mysql.ml2str session_id; Mysql.ml2str username]) ^
+    ";" in
+  ignore (Mysql.exec db_connection query)
+;;
+
+let retrieve_user db_connection session_id =
+  let result = Mysql.exec db_connection
+    ("select authenticated_user from sessions where session_id like binary " ^
+      (Mysql.ml2str session_id) ^ ";")
+  in
+    match Mysql.fetch result with
+      | None -> raise Not_found
+      | Some results ->
+        (match Array.get results 0 with
+          | Some username -> username
+          | _ -> assert false
+        )
+;;
+
+let flickr_api_key = "3b6c7c141f55fad34ae21ac70ad3dbbc";;
+let flickr_secret  = "7689c959aa5eada2";;
+
+let word_list = 
+  (* List.map (Netencoding.Url.encode) *) 
+  (* Encoding should be handler by the javascript? *)
+  [
+    "color"; "computer"; "videogame"; "stomach";
+    "carrot"; "dog"; "pancake"; "snake";
+    "spoon"; "world"; "pacman"; "magazine";
+    "big ben"; "rolling stones"; "spongebob";
+    "lion"; "hot dog"; "soccer"; "south park";
+    "mario bros"; "scotland"; "frog"; "windows";
+    "blue"; "red"; "television"; "children";
+    "kinder"; "ferrari"; "paperclip"; "bush";
+    "scissors"; "pokemon"; "blackberry"; "youtube" 
+  ]

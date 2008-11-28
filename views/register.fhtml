@@ -1,27 +1,34 @@
-{% if start %}
-  Register:
-  <form method="post" action="/register">
-      Username: <input type="text" name="username" /> <br />
-      Password: <input type="password" name="password" /> <br />
-      <input type="submit">
-  <form>
-{% else %}
-  {% if len(errors) > 0 %}
-    The following errors were encountered:
-    <ul>
-      {% for error in errors %}
-        <li> {{ error }}
-      {% endfor %}
-    </ul>
+<html>
+  <head>
+    <title>Register</title>
+  </head>
+  <body>
+    {% if start %}
+      Register:
+      <form method="post" action="/register">
+          Username: <input type="text" name="username" /> <br />
+          Password: <input type="password" name="password" /> <br />
+          <input type="submit">
+      <form>
+    {% else %}
+      {% if len(errors) > 0 %}
+        The following errors were encountered:
+        <ul>
+          {% for error in errors %}
+            <li> {{ error }}
+          {% endfor %}
+        </ul>
 
-    <form method="post" action="/register">
-        Username: <input type="text" name="username" value="{{username}}"/> <br />
-        Password: <input type="password" name="password" value="{{password}}"/> <br />
-        <input type="submit">
-    <form>
+        <form method="post" action="/register">
+            Username: <input type="text" name="username" value="{{ username }}"/> <br />
+            Password: <input type="password" name="password" value="{{ password }}"/> <br />
+            <input type="submit">
+        <form>
 
-  {% else %}
-    Congratulations {{username}}!!.
-    Have fun at our game!
-  {% endif %}
-{% endif %}
+      {% else %}
+        Welcome {{username}}, have fun!
+        <a href="/play">
+      {% endif %}
+    {% endif %}
+  </body>
+</html>

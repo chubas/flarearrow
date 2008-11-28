@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    {% if error %} Login error. Try again <br /> {% endif %}
+    {% if start or error %}
+      <form method="post" action="/login">
+          Username: <input type="text" name="username" /> <br />
+          Password: <input type="password" name="password" /> <br />
+          <input type="submit">
+      <form>
+    {% else %}
+      You are now logged in!
+      Go and <a href="/play">play now!</a>
+    {% endif %}
+  </body>
+</html>
