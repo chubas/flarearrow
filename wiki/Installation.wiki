@@ -15,7 +15,7 @@ Installation Instructions.
     * libounit-ocaml-dev 
     * libocamlne
     * libmysql-ocaml
-    * mysql
+    * mysql-server
   * Download the Source Code
   * go to the web_server (src/web_server/) folder of the project and Modify server.conf and configuration_parameters.ml.template
   * from a Terminal window go to the src (src/) folder of the project and type make
