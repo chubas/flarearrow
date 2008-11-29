@@ -33,9 +33,6 @@ let start ?(config_filename = "config.yaml") (_:unit) =
           read_config_file config_filename in
       let f = fun _ -> config_file in
     *)
-    
-    (* TODO: Change configuration here *)
-    Server_utils.template_dir := Configuration_parameters.template_dir;
 
     (* Create connection here *)
     Controllers.db_connection := Some

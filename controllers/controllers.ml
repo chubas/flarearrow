@@ -176,7 +176,7 @@ let login_controller_params (cgi:cgi_activation) =
                   let key = 
                     Client_lib.pwdstring (string_of_float (Unix.time ())) in
                   let cookie = { 
-                    cookie_name = "flarearrow_session";
+                        cookie_name = "flarearrow_session";
                         cookie_value = key;
                         cookie_expires = None (* At browser exit *);
                         cookie_domain = None;
@@ -216,7 +216,15 @@ let logout_controller_params (cgi:cgi_activation) =
   end;
   cgi # set_redirection_header "/login";
   []
-;;    
+;;
+
+let random_word () =
+  Random.init
+    (int_of_float (Unix.time ()));
+  List.nth
+    Client_lib.word_list
+    (Random.int (List.length Client_lib.word_list))
+;;
 
 let play_controller_params (cgi:cgi_activation) =
   match logged_in_user cgi with
@@ -224,14 +232,62 @@ let play_controller_params (cgi:cgi_activation) =
         cgi # set_redirection_header "/login";
         [
           "username", NULL;
-          "random_word", EXP (String "")
+          "random_word", NULL;
+          "tries", NULL;
+          "corrects", NULL;
+          "score", NULL;
         ]
     | Some username ->
+        let t, c = Client_lib.user_stats (get_db ()) username in
+        let score = match t with
+          | 0 -> 0.0  (* Avoid division by zero errors *)
+          | _ -> (float_of_int c) /. (float_of_int t)
+        in
         [ "username", EXP (String username);
           "random_word",
-            EXP( String (List.nth Client_lib.word_list
-            (Random.int (List.length Client_lib.word_list))))
+            EXP(String (random_word ()));
+          "tries", EXP(Numeric(Int t));
+          "corrects", EXP(Numeric(Int c));
+          "score", EXP(Numeric(Float score))
         ]
+;;
+
+let guess_controller_params (cgi:cgi_activation) =
+  match cgi # request_method with
+    | (`POST:request_method) ->
+	    (
+        match logged_in_user cgi with
+	        | None -> 
+            cgi # set_redirection_header "/login";
+	          ["error", EXP(Boolean true)]
+          | Some username ->
+              let _guess = get_variable_or_default cgi "guess" in
+              let _answer = get_variable_or_default cgi "answer" in
+              let is_correct, answer = match (_guess, _answer) with
+                | Some g, Some a ->
+                  (try
+                    ((trim (String.lowercase g)) = (trim (String.lowercase a)), a)
+                  with
+                    _ -> (false, a)
+                  )
+                | _ -> failwith "Required parameters 'guess' and 'answer'"
+              in 
+              let t, c = Client_lib.user_answered (get_db ()) username is_correct in
+              let score = match t with
+                | 0 -> 0.0  (* Avoid division by zero errors *)
+                | _ -> (float_of_int c) /. (float_of_int t)
+              in
+              [ 
+                "error", EXP(Boolean false);
+                "was_correct", EXP(Boolean is_correct);
+                "score", EXP(Numeric(Float score));
+                "tries", EXP(Numeric(Int t));
+                "corrects", EXP(Numeric(Int c));
+                "correct_word", EXP(String answer);
+                "next_word", EXP(String (random_word ()))
+              ]
+      )
+    | _ -> failwith "Invalid request method"
 ;;
 
 let handlers = [
@@ -251,4 +307,9 @@ let handlers = [
       ~bind_parameters:login_controller_params;
     template_process "logout"
       ~bind_parameters:logout_controller_params;
+    template_process "guess"
+      ~bind_parameters:guess_controller_params
+      ~template_file_function:(function _ -> "result.json")
+      ~headers:["Content-type", "text/plain"];
 ];;
+

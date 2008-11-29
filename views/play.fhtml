@@ -4,67 +4,111 @@
     <script type="text/javascript" src="/prototype.js"></script>
     <script type="text/javascript">
       function jsonFlickrApi(rsp) {
-       if (rsp.stat != "ok"){
-        return;
-        /// TODO: Alert that an error has occured
-       }
-       var s = "";
-       for (var i=0; i < rsp.photos.photo.length; i++) {
-        photo = rsp.photos.photo[i];
-        t_url = "http://farm" + photo.farm + 
-        ".static.flickr.com/" + photo.server + "/" + 
-        photo.id + "_" + photo.secret + "_" + "s.jpg";
-                  
-        s +=  '<img src="' + t_url + '"/>';
-       }
-       document.writeln(s); 
+        $('flickr').innerHTML = "";
+        if (rsp.stat != "ok"){
+          $('flickr').innerHTML = "Error!";
+          return;
+        }
+        var s = "";
+        for (var i=0; i < rsp.photos.photo.length; i++) {
+          photo = rsp.photos.photo[i];
+          var t_url = "http://farm" + photo.farm + 
+          ".static.flickr.com/" + photo.server + "/" + 
+          photo.id + "_" + photo.secret + "_" + "s.jpg";
+          s +=  '<img src="' + t_url + '"/>';
+        }
+
+        $('flickr').innerHTML = s;
+      }
+
+      function get_images(word) {
+        var ran_page = Math.floor(Math.random() * 5) + 1;
+        var url = "http://api.flickr.com/services/rest/?" +
+                  "method=flickr.photos.search&" + 
+                  "api_key=3b6c7c141f55fad34ae21ac70ad3dbbc&" +
+                  "format=json&" +
+                  "page=" + ran_page + "&" +
+                  "q=" + word + "&" + 
+                  "text=" + word + "&" +
+                  "sort=relevance&" + 
+                  //"tags=" + word + "&" +
+                  "per_page=36&" +
+                  "tag_mode=all";
+        var flickrRequestURL = encodeURI(url);
+        // do the api request
+        var script = document.createElement('script');
+        script.src = flickrRequestURL;
+        script.type = 'text/javascript';
+        var head = document.getElementsByTagName('head').item(0);
+        head.appendChild(script);
+        return false;
+      }
+
+      function guess_word() {
+        var answer = $('current_answer').innerHTML;
+        var guess  = $F( $('guess_form').guess );
+        if(guess.blank())
+        {
+          return;
+        }
+        $("last_answer").innerHTML = "Your guess: " + guess;
+        var req = new Ajax.Request(
+          "/guess",
+          {
+            method: 'post',
+            parameters: {"answer":answer, "guess":guess},
+            onLoading: function (){ $('loading').style.display = 'block'; },
+            onComplete: function (r){
+              var json = r.responseText.evalJSON();
+              if(json.was_correct) {
+                $('last_answer').innerHTML = "Yeah!, " + json.correct_word + " was correct";
+              } else {
+                $('last_answer').innerHTML = "Buuu! Correct answer was " + json.correct_word; 
+              };
+              $('loading').style.display = "none";
+              $('current_answer').innerHTML = json.next_word;
+              $('tries').innerHTML = json.tries;
+              $('corrects').innerHTML = json.corrects;
+              $('score_bar_inner').style.width = "" + (json.score * 400) + "px";
+              $('loading').style.display = 'none';
+              get_images(json.next_word);
+              $('guess_form').guess.value = "";
+              $('guess_form').guess.focus();
+            }
+          }
+        );
+        return false;
+      }
+
+      function init() {
+        get_images('{{ random_word }}');
+        var score = {{ score }};
+        $('score_bar_inner').style.width = "" + (score * 400) + "px";
+        //$('submit_button').onclick = guess_word;
       }
     </script>
   </head>
 
-  <body>
-    Hello {{ username }} <br />
-
-    <!-- SCRIPT SECTION -->
-    
-    <script type="text/javascript" 
-      language="javascript" 
-      src="http://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags={{ random_word }}&text={{ random_word }}&tag_mode=all&per_page=36&api_key=3b6c7c141f55fad34ae21ac70ad3dbbc">
+  <body onload="init();">
+    <script type="text/javascript">
     </script>
-    <form method="post" action="/play">
+    Hello {{ username }} <br />
+    <!-- SCRIPT SECTION -->
+    <div id="loading" style="display:none;font-size:4em;">Loading....</div>
+    <div id="last_answer">  </div>
+    <div id="current_answer" style="display:none;">{{ random_word }}</div>
+    <div id="score">
+      <p> Tries: <span id="tries">{{ tries }}</span> </p>
+      <p> Corrects: <span id="corrects">{{ corrects }}</span>
+      <div id="score_bar_out" style="width:400px; height:20px; background-color:red;">
+        <div id="score_bar_inner" style="height:100%; background-color:green"> </div>
+      </div>
+    </div>
+    <div id="flickr"> </div>   
+    <form method="post" action="#" onsubmit="guess_word(); return false;" id="guess_form">
+      <input type="hidden" name="answer" value="{{ random_word }}">
       Your guess: <input type="text" name="guess" /> <br />
-      <input type="submit">
+      <input type="submit" id="submit_button" />
     </form>
   </body>
 </html>
-
-<!--
-function createFlickerURL(searchTerms, perPage) {
-	//constructs the flickr request URL
-	var URL = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="
-			  + FLICKRKEY +
-			  "&user_id="
-			  + MYUSRID +
-			  "&text="
-			  + searchTerms +
-			  "&per_page="
-			  + perPage +
-			  "&format=json";
-	return encodeURI(URL);
-}
-
-function getSearchResults(searchString, perPage) {
-	//create the api request
-    var flickrRequestURL = createFlickerURL(searchString, perPage);
-    // grab and clear container content...
-	$('flikrHolder').innerHTML = "";
-    // do the api request
-    var script = document.createElement('script');
-    script.src = flickrRequestURL;
-    script.type = 'text/javascript';
-    var head = document.getElementsByTagName('head').item(0);
-    head.appendChild(script);
-    return false;
-}
-
->

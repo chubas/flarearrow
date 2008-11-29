@@ -1,23 +1,20 @@
 open Netcgi1_compat.Netcgi_types;;
 open Expression_evaluator;;
 
-let template_dir = ref "";;
+let template_dir = Configuration_parameters.template_dir;;
 
 let template_process
       ?(bind_parameters = function _ -> [])
       ?(headers = [])
       ?(template_file_function = function (_:string) -> "")
       ?(path:string = "")
-      ?(path_file_function = function (_:string) -> "")
       (view:string) = 
   let template_file = match template_file_function view with
     | "" -> view ^ ".fhtml"
     | e  -> e
   in
-  let uri_path = if path <> "" then path else (
-    let p = path_file_function view in 
-    if p <> "" then p else "/" ^ view
-  ) in 
+  let uri_path = if path <> "" then path else (template_dir ^ "/")
+  in 
   let process (cgi:cgi_activation) =
     try
       (* Default values for pages *)
@@ -28,7 +25,7 @@ let template_process
           ~content_type:"text/html; charset=\"iso-8859-1\""
           ();
       *)
-      let contents = parse_file (!template_dir ^ "/" ^ template_file) (bind_parameters cgi) in 
+      let contents = parse_file (uri_path ^ template_file) (bind_parameters cgi) in 
       cgi # output # output_string contents;
       (* (headers cgi); *)
       let env = cgi # environment in
@@ -61,4 +58,5 @@ let get_variable_or_default ?(default = None) (cgi:cgi_activation) var_name =
   with
     | Not_found -> default
 ;;
+
 
