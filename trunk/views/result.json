@@ -1,0 +1,10 @@
+{% if not error %}
+{
+  was_correct:{{ was_correct}},
+  correct_word:"{{ correct_word }}",
+  score:{{ score }},
+  tries:{{ tries }},
+  corrects:{{ corrects }},
+  next_word:"{{ next_word }}"
+}
+{% endif %}
