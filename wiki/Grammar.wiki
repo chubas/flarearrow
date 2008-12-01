@@ -1,38 +1,124 @@
-#labels Grammar
-=Grammar=
-----
-==Numbers==
-the operations that should be defined for numbers are _addition_, _subtraction_, _multiplication_, _division_ and _module_. Their use is the following:
- * a*b
- * a/b
- * a%b
- * -a
- * a+b
- * a-b
+#labels Grammar,Phase-Implementation,Phase-Design
+#Description of the template language grammar
 
-==Booleans==
-the operations that should be defined for Boolean values are _and_, _or_, _not_ and _xor_.
-their use is the following (from higher to lower precedence):
- * a and b
- * a or b
- * not a
- * a xor b
+= Grammar =
 
-==Strings and Lists==
-the following operations should be defined: _length_, _access_ and _concatenation_. their use is the following:
- * len(list), strlen(string)
- * a[b]
- * concat(a, b)
+Template language grammar:
 
-==Dictionaries==
-the following operation should be defined: _access_
- * elem(dict, key)
+template:
+  {{{(raw_text | comment | expression)*}}}
+  
+raw_text:
+  _any character sequence except "{{", "{%" or "{#" unless escaped or quoted_
+  
+comment:
+  _{# any character sequence except "#}" unless escaped or quoted #}_
+  
+expression:
+  {{{single_expression | if_expression | for_expression}}}
+  
+for_expression:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*{% for * {{{for_variables}}} *in* {{{expression_atom}}} *%}*
+    {{{template}}}
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*{% endfor %}*
 
-==Comparisons==
-the operations that should be defined are _equal_, _less or equal than_, _greater or equal_, _less than_,_greater than_
-they should function with anything and their use is the following:
- * a=b
- * a<=b
- * a>=b
- * a<b
- * a>b
+for_variables:
+  {{{variable | }}}
+  {{{variable, variable}}}
+  
+if_expression:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*{% if * {{{expression_atom}}} *%}*
+    {{{template}}}
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*{% endfor %}*
+
+single_expression:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*{{* {{{multiple_expression_atoms}}} *}}*
+  
+multiple_expression_atoms:
+  {{{expression_atom |}}}
+  {{{expression_atom}}}*;;* {{{multiple_expression_atoms}}}
+  
+expression_atom:
+  {{{simple_expression | }}}
+  {{{operator_expression}}}
+  
+simple_expression:
+  {{{parenthesized_expression |}}}
+  {{{function | }}}
+  {{{elemental_type}}}
+  
+parenthesized_expression:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*(* {{{expression_atom}}} *)*
+  
+function:
+  {{{identifier}}}*(*{{{list_contents}}}*)* |
+  {{{simple_expression}}}*.[*{{{expression_atom}}}*]* |
+  {{{simple_expression}}}*.{*{{{expression_atom}}}*}*
+  
+operator_expression:
+  {{{unary_operator expression_atom | }}}
+  {{{expression_atom binary_operator expression_atom}}}
+  
+unary_operator:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*not* {{{|}}} *~*
+  
+binary_operator:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*and* {{{|}}} *or* {{{|}}} *xor* {{{|}}}
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*==* {{{|}}} *!=* {{{|}}} *>* {{{|}}} *<* {{{|}}} *>=* {{{|}}} *<=* {{{|}}}
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*+* {{{|}}} *-* {{{|}}} *`*`* {{{|}}} */* {{{|}}} *%* {{{|}}} *^*
+  
+elemental_type:
+  {{{list | }}}
+  {{{dict | }}}
+  {{{basic_type | }}}
+  {{{variable}}}
+  
+list:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*[* {{{list_contents}}} *]*
+
+list_contents:
+  {{{expression_atom | }}}
+  {{{expression_atom}}}*;* {{{list_contents }}}
+  
+dict_contents:
+  {{{dict_tuple | }}}
+  {{{dict_tuple}}}*;* {{{dict_contents}}}
+  
+dict_tuple:
+  {{{string}}} *:* {{{expression_atom}}}
+  
+basic_type:
+  {{{numeric | boolean | string | char}}}
+  
+numeric:
+  {{{int | float}}}
+  
+int:
+  {{{digit+}}}
+  
+float:
+  {{{digit+}}}*.*{{{digit+}}}
+  
+string:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*"*{{{string_contents}}}*"*
+  
+string_contents:
+  _any characted except \ or " unless escaped_
+  
+character:
+  <wiki:comment>Wiki syntax is horrible</wiki:comment>*'*_any character_*'*
+  
+variable:
+  {{{char_id( (char_id|digit)* )*}}}
+
+char_id:
+  _['A'..'Z' 'a'..'z' '`_`']_
+
+digit:
+  _'0'..'9'_
+
+---
+
+Escaped character sequence means putting a backslash before, e.g. putting a \#} inside a comment will not close it.
+
+Quoted character sequence means putting it into a string, e.g. putting the string "}}" inside an expression will not terminate it.
