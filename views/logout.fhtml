@@ -1,8 +1,24 @@
-<html>
-  <head>
-    <title>Log out</title>
-  </head>
-  <body>
-    Logging out...
-  </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Log out</title>
+		<link rel="stylesheet" type="text/css" href="reset.css" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="header">
+				<h1>What The Flickr</h1>
+			<div id="tagline"> Guess the tag that brings the following images </div>
+			</div>
+			<div id="main">
+				Logging out...
+			</div>
+			<div id="footer">
+				Proyecto de Desarrollo de Software<br />
+				Writen by Tetrabug<br />
+				Powered by Flare Arrow.
+			</div>
+		</div>
+	</body>
 </html>

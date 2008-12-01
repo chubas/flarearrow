@@ -1,6 +1,9 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Play</title>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="/prototype.js"></script>
     <script type="text/javascript">
       function jsonFlickrApi(rsp) {
@@ -90,25 +93,41 @@
   </head>
 
   <body onload="init();">
-    <script type="text/javascript">
-    </script>
-    Hello {{ username }} <br />
-    <!-- SCRIPT SECTION -->
-    <div id="loading" style="display:none;font-size:4em;">Loading....</div>
-    <div id="last_answer">  </div>
-    <div id="current_answer" style="display:none;">{{ random_word }}</div>
-    <div id="score">
-      <p> Tries: <span id="tries">{{ tries }}</span> </p>
-      <p> Corrects: <span id="corrects">{{ corrects }}</span>
-      <div id="score_bar_out" style="width:400px; height:20px; background-color:red;">
-        <div id="score_bar_inner" style="height:100%; background-color:green"> </div>
-      </div>
-    </div>
-    <div id="flickr"> </div>   
-    <form method="post" action="#" onsubmit="guess_word(); return false;" id="guess_form">
-      <input type="hidden" name="answer" value="{{ random_word }}">
-      Your guess: <input type="text" name="guess" /> <br />
-      <input type="submit" id="submit_button" />
-    </form>
+	<div id="wrapper">
+		<div id="header">
+			<h1>What The Flickr</h1>
+			<div id="tagline"> Guess the tag that brings the following images </div>
+		</div>
+		<div id="menu">
+			<div id="menuusr"> Hello {{ username }}</div>
+			<p id="menulinks"> [<a href="./logout">Log Out</a>]</p>
+		</div>
+		<div id="main">
+			<script type="text/javascript">
+			</script>
+			<!-- SCRIPT SECTION -->
+			<div id="loading" style="display:none;font-size:4em;">Loading....</div>
+			<div id="last_answer">  </div>
+			<div id="current_answer" style="display:none;">{{ random_word }}</div>
+			<div id="score">
+			  <p> Tries: <span id="tries" class="result">{{ tries }}</span> </p>
+			  <p> Corrects: <span id="corrects" class="result">{{ corrects }}</span> </p>
+			  <div id="score_bar_out">
+				<div id="score_bar_inner"> </div>
+			  </div>
+			</div>
+			<div id="flickr"> </div>   
+			<form method="post" action="#" onsubmit="guess_word(); return false;" id="guess_form">
+			  <input type="hidden" name="answer" value="{{ random_word }}">
+			  Your guess: <input type="text" name="guess" /> <br />
+			  <input type="submit" id="submit_button" />
+			</form>
+		</div>
+		<div id="footer">
+			Proyecto de Desarrollo de Software<br />
+			Writen by Tetrabug<br />
+			Powered by Flare Arrow.
+		</div>
+	</div>
   </body>
 </html>

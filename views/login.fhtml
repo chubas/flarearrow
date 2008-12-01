@@ -1,18 +1,34 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Login</title>
-  </head>
-  <body>
-    {% if error %} Login error. Try again <br /> {% endif %}
-    {% if start or error %}
-      <form method="post" action="/login">
-          Username: <input type="text" name="username" /> <br />
-          Password: <input type="password" name="password" /> <br />
-          <input type="submit">
-      <form>
-    {% else %}
-      You are now logged in!
-      Go and <a href="/play">play now!</a>
-    {% endif %}
-  </body>
+    <title>Log in</title>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="header">
+				<h1>What The Flickr</h1>
+			<div id="tagline"> Guess the tag that brings the following images </div>
+			</div>
+			<div id="main">
+				{% if error %} Login error. Try again <br /> {% endif %}
+				{% if start or error %}
+				<form method="post" action="/login">
+					Username: <input type="text" name="username" /> <br />
+					Password: <input type="password" name="password" /> <br />
+					<input type="submit">
+				<form>
+				{% else %}
+					You are now logged in!
+					Go and <a href="/play">play now!</a>
+				{% endif %}
+			</div>
+			<div id="footer">
+				Proyecto de Desarrollo de Software<br />
+				Writen by Tetrabug<br />
+				Powered by Flare Arrow.
+			</div>
+		</div>
+	</body>
 </html>
