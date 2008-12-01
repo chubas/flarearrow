@@ -1,0 +1,27 @@
+#How to write Controllers.
+----
+= How To =
+  * Add a Uri to Server.conf like the following
+
+        uri {
+          path = "/name-of-the-page";
+          service {
+            type = "dynamic";
+            handler = "/name-of-the-controller";
+          }
+        };
+
+  * Register the handler in the Handlrer list in controllers.ml
+     template_process "name-of-the-controller"
+         ~bind_parameters:name_controller_params;
+  
+  * Define the controller in controllers.ml
+  let name_controller_params (cgi:cgi_activation) =
+    let param1 = get_variable_or_default cgi "param-name"   ~default:None in
+    logic-of-the-controller
+        -> ["result", var1; "something", var2 ]
+  ;;
+
+  *  The result of the controller should be a list of tuples
+
+  * variables should be of type EXP(Numeric(Int)) or EXP(Numeric(Float)) or EXP(String()) or EXP(Boolean)or LIST or DICT 
