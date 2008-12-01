@@ -34,7 +34,7 @@
 						<form>
 					{% else %}
 						Welcome {{username}}, have fun!
-						<a href="/play">
+						<a href="/login"> Log in Now </a>
 					{% endif %}
 				{% endif %}
 			</div>
